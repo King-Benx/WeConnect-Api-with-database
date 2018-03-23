@@ -2,6 +2,7 @@ import jwt
 import datetime
 from flask import jsonify, request, url_for, make_response
 from ..models import User
+from config import Config
 from . import api
 from functools import wraps
 from ..functions import make_json_reply
@@ -18,8 +19,8 @@ def token_required(f):
             return make_json_reply('message ',
                                    'Unauthorized access token is missing'), 401
         try:
-            data = jwt.decode(token, SECRET_KEY)
-            current_user = User.get_user(user_id=data['id'])
+            data = jwt.decode(token, Config.SECRET_KEY)
+            current_user = User.query.get(user_id=int(data['id']))
         except:
             return make_json_reply('message', 'Token is invalid'), 401
         return f(current_user, *args, **kwargs)
@@ -39,22 +40,22 @@ def login():
                 'Basic Realm="url_for(\'api.login\',_external=True)"'
             })
 
-    user = User.login(auth.username, auth.password)
-    if not user:
+    user = User.query.filter_by(username=auth.username).first()
+    if not user.check_password(auth.password):
         return make_response(
             "Could not verify! if you are not a user register otherwise try again",
             401, {
                 'WWW-Authenticate':
                 'Basic Realm =' + str(url_for('api.login', _external=True))
             })
-    if user:
+    if user.check_password(auth.password):
         token = jwt.encode(
             {
-                'id': User.get_user_id_by_username(auth.username),
+                'id':user.id,
                 'exp':
                 datetime.datetime.utcnow() + datetime.timedelta(minutes=20)
             },
-            SECRET_KEY)
+            Config.SECRET_KEY)
         return make_json_reply('token', token.decode('UTF-8')), 200
     else:
         return make_response(

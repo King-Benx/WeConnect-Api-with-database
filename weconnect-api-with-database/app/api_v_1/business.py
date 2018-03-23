@@ -1,7 +1,7 @@
 from flask import request, url_for, session, jsonify
 from . import api
+from .. import db
 from ..models import Business, User
-from .. import known_business_ids, businesses
 from .authentication import token_required
 from ..functions import make_json_reply
 
@@ -13,12 +13,14 @@ def register_business(current_user):
     data = request.get_json()
     if data:
         if (len(data.keys()) == 4):
-            user_id = int(User.get_user_id_by_username(current_user[0]))
+            user_information = User.query.filter_by(username=current_user[0])
+            user_id = user_information.id
             name = data['name']
             location = data['location']
             category = data['category']
             description = data['description']
-            business = Business(user_id, name, location, category, description)
+            business = Business(user_id=user_id, name=name, location=location, category=category, description=description)
+            db.session.add(business)
             if business:
                 return make_json_reply('message', 'business ' + str(
                     business.name) + ' successfully created'), 201
@@ -35,21 +37,30 @@ def register_business(current_user):
 @token_required
 def update_business(current_user, businessId):
     # update business
-    if int(businessId) in known_business_ids:
+    check_business_by_id = Business.query.get_or_404(int(businessId))
+    if check_business_by_id:
         data = request.get_json()
-        business_id = int(businessId)
         name = data['name']
         location = data['location']
         category = data['category']
         description = data['description']
-        user_id = int(User.get_user_id_by_username(current_user[0]))
-        status = Business.update_business(user_id, business_id, name, location,
-                                          category, description)
-        if status:
-            return make_json_reply(
-                'message', 'successfully updated business ' + str(name)), 201
-        else:
-            return make_json_reply('message',
+        user_information = User.query.filter_by(username=current_user[0])
+        user_id = user_information.id
+        if check_business_by_id.user_id == user_id:
+            if name != '' and name != check_business_by_id.name:
+                check_business_by_id.name = name 
+            if location != '' and location != check_business_by_id.location:
+                check_business_by_id.location = location
+            if category != '' and category != check_business_by_id.category:
+                check_business_by_id.category = category
+            if description != '' and description != check_business_by_id.description:
+                check_business_by_id.description = description
+            db.session.add(check_business_by_id)
+            if check_business_by_id:
+                return make_json_reply(
+                    'message', 'successfully updated business ' + str(name)), 201
+            else:
+                return make_json_reply('message',
                                    'Failure updating ' + str(name)), 400
     else:
         return make_json_reply('message', 'Business id does not exist'), 400
@@ -59,13 +70,12 @@ def update_business(current_user, businessId):
 @token_required
 def delete_business(current_user, businessId):
     # delete business by id
-    business_id = int(businessId)
-    if business_id in known_business_ids:
-        business_to_be_deleted = Business.get_business_by_id(business_id)
-        business_name = business_to_be_deleted[1]
-        user_id = int(User.get_user_id_by_username(current_user[0]))
-        status = Business.delete_business(user_id, business_id)
-        if status:
+    check_business_by_id = Business.query.get_or_404(int(businessId))
+    business_name = check_business_by_id.name
+    user_information = User.query.filter_by(username=current_user[0])
+    user_id = user_information.id
+    if user_id == check_business_by_id.user_id:
+        if db.session.delete(check_business_by_id):
             return make_json_reply(
                 'message',
                 'successfully deleted business' + str(business_name)), 200
@@ -80,8 +90,8 @@ def delete_business(current_user, businessId):
 @token_required
 def retrieve_all_businesses(current_user):
     # retrieve all businesses
-    if businesses:
-        return jsonify(Business.get_all_businesses()), 200
+    if Business.query.count() > 0:
+        return jsonify(Business.query.all()), 200
     else:
         return make_json_reply(
             'message', 'No businesses registered currently, register one at ' +
@@ -92,14 +102,14 @@ def retrieve_all_businesses(current_user):
 @token_required
 def retrieve_a_business(current_user, businessId):
     # retrieve a single businesses
-    if int(businessId) in known_business_ids:
-        specific_business = Business.get_business_by_id(int(businessId))
+    if Business.query.get_or_404(int(businessId)):
+        specific_business = Business.query.get_or_404(int(businessId))
         information = {
-            "user_id": specific_business[0],
-            "name": specific_business[1],
-            "location": specific_business[2],
-            "category": specific_business[3],
-            "description": specific_business[4]
+            "user_id": specific_business.user_id,
+            "name": specific_business.name,
+            "location": specific_business.location,
+            "category": specific_business.category,
+            "description": specific_business.description
         }
         if information:
             return jsonify(information), 200

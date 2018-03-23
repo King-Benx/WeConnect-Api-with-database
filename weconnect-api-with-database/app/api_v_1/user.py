@@ -1,7 +1,7 @@
 from flask import request, url_for, session
 from . import api
 from ..models import User
-from .. import known_usernames, known_business_ids, businesses, users, reviews, known_review_ids, known_user_ids, users
+from .. import db
 from .authentication import token_required
 from ..functions import make_json_reply
 
@@ -19,7 +19,8 @@ def register_new_user():
                    and password != '') and (email is not set
                                             and password is not set
                                             and username is not set):
-            user = User(username, email, password)
+            user = User(username=username, email=email, password=password)
+            db.session.add(user);
             if user:
                 return make_json_reply(
                     'message', 'Successfully created user ' + str(username) +
@@ -42,20 +43,6 @@ def logout_user(current_user):
     # This logs out user from the application
     request.authorization = None
     current_user = None
-    global users
-    global known_user_ids
-    global reviews
-    global known_review_ids
-    global businesses
-    global known_business_ids
-    global known_usernames
-    del users[:]
-    del known_business_ids[:]
-    del reviews[:]
-    del known_review_ids[:]
-    del businesses[:]
-    del known_usernames[:]
-    del known_user_ids[:]
     if not request.authorization:
         return make_json_reply('message',
                                'You have been successfully logout'), 200
@@ -73,8 +60,10 @@ def reset_password(current_user):
     if (len(data.keys()) == 2):
         username = data['username']
         password = data['new_password']
-        status = User.reset_password(username, password)
-        if status:
+        user_data = User.query.filter_by(username=username).first()
+        user_data.password = password
+        db.session.add(user_data)
+        if user_data.check_password(password):
             return make_json_reply(
                 'message', 'password has been reset to ' + str(password)), 200
         else:

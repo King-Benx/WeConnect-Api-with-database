@@ -1,9 +1,9 @@
 from flask import request, jsonify, session, url_for
 from . import api
-from ..models import Review, User
+from ..models import Review, User, Business
 from ..functions import make_json_reply
 from .authentication import token_required
-from .. import known_business_ids
+from .. import db
 
 
 @api.route('/api/v1/businesses/<businessId>/reviews', methods=['POST'])
@@ -12,11 +12,13 @@ def post_review(current_user, businessId):
     # create a review for a business
     data = request.get_json()
     if len(data.keys()) == 1:
-        user_id = int(User.get_user_id_by_username(current_user[0]))
+        user_information = User.query.filter_by(username=current_user[0])
+        user_id = user_information.id
         business_id = int(businessId)
-        if business_id in known_business_ids:
+        if Business.query.get_or_404(business_id):
             review = data['review']
             review = Review(user_id, business_id, review)
+            db.session.add(review)
             if review:
                 return make_json_reply('message',
                                        'review successfully created'), 201
@@ -34,8 +36,8 @@ def post_review(current_user, businessId):
 @token_required
 def get_reviews(current_user, businessId):
     # get reviews for business
-    if int(businessId) in known_business_ids:
-        reviews = Review.get_review_by_business(int(businessId))
+    if Business.query.get_404(int(businessId)):
+        reviews = Review.query.filter_by(business_id=int(businessId))
         if reviews:
             return jsonify(reviews), 200
         else:
