@@ -13,8 +13,7 @@ def register_business(current_user):
     data = request.get_json()
     if data:
         if (len(data.keys()) == 4):
-            user_information = User.query.filter_by(username=current_user.username)
-            user_id = user_information.id
+            user_id = current_user.id
             name = data['name']
             location = data['location']
             category = data['category']
@@ -42,7 +41,7 @@ def register_business(current_user):
 @token_required
 def update_business(current_user, businessId):
     # update business
-    check_business_by_id = Business.query.get_or_404(int(businessId))
+    check_business_by_id = Business.query.get(int(businessId))
     if check_business_by_id:
         data = request.get_json()
         name = data['name']
@@ -76,20 +75,18 @@ def update_business(current_user, businessId):
 @token_required
 def delete_business(current_user, businessId):
     # delete business by id
-    check_business_by_id = Business.query.get_or_404(int(businessId))
-    business_name = check_business_by_id.name
-    user_information = User.query.filter_by(username=current_user.username)
-    user_id = user_information.id
-    if user_id == check_business_by_id.user_id:
-        if db.session.delete(check_business_by_id):
-            return make_json_reply(
-                'message',
-                'successfully deleted business' + str(business_name)), 200
-        else:
-            return make_json_reply(
-                'message', 'Failure deleting business' + str(business_name))
+    check_business_by_id = Business.query.get(int(businessId))
+    if check_business_by_id and check_business_by_id.user_id == current_user.id:
+        business_name = check_business_by_id.name
+        db.session.delete(check_business_by_id)
+        return make_json_reply(
+            'message',
+            'successfully deleted business ' + str(business_name)), 200
     else:
-        return make_json_reply('message', 'Business id does not exist'), 404
+        return make_json_reply(
+            'message',
+            'Business id might not exist or you have no right to delete business'
+        ), 404
 
 
 @api.route('/api/v1/businesses', methods=['GET'])
@@ -97,7 +94,9 @@ def delete_business(current_user, businessId):
 def retrieve_all_businesses(current_user):
     # retrieve all businesses
     if Business.query.count() > 0:
-        return jsonify(Business.query.all()), 200
+        businesses = Business.query.all()
+        return jsonify('Businesses ',
+                       [business.to_json() for business in businesses]), 200
     else:
         return make_json_reply(
             'message', 'No businesses registered currently, register one at ' +
@@ -108,17 +107,10 @@ def retrieve_all_businesses(current_user):
 @token_required
 def retrieve_a_business(current_user, businessId):
     # retrieve a single businesses
-    if Business.query.get_or_404(int(businessId)):
+    if Business.query.get(int(businessId)):
         specific_business = Business.query.get_or_404(int(businessId))
-        information = {
-            "user_id": specific_business.user_id,
-            "name": specific_business.name,
-            "location": specific_business.location,
-            "category": specific_business.category,
-            "description": specific_business.description
-        }
-        if information:
-            return jsonify(information), 200
+        if specific_business:
+            return jsonify('Business', specific_business.to_json()), 200
         else:
             return make_json_reply(
                 'message',

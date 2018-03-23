@@ -41,6 +41,17 @@ class Business(db.Model):
     def __repr__(self):
         return 'Business name %r' % self.name
 
+    def to_json(self):
+        json_business = {
+            'id': self.id,
+            'user_id': self.user_id,
+            'name': self.name,
+            'location': self.location,
+            'category': self.category,
+            'description': self.description
+        }
+        return json_business
+
 
 class Review(db.Model):
     """ Review creates a review by a particular user to a specific business """

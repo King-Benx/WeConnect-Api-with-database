@@ -20,7 +20,7 @@ def token_required(f):
                                    'Unauthorized access token is missing'), 401
         try:
             data = jwt.decode(token, Config.SECRET_KEY)
-            current_user = User.query.get(int(data['id'])).first()
+            current_user = User.query.get(int(data['id']))
         except:
             return make_json_reply('message', 'Token is invalid'), 401
         return f(current_user, *args, **kwargs)
@@ -56,7 +56,7 @@ def login():
                 datetime.datetime.utcnow() + datetime.timedelta(minutes=20)
             },
             Config.SECRET_KEY)
-        return make_json_reply('token', token.decode('UTF-8')), 200
+        return make_json_reply('Use Token', token.decode('UTF-8')), 200
     else:
         return make_response(
             "Could not verify! if you are not a user, register otherwise try again"
