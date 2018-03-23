@@ -19,7 +19,12 @@ def register_business(current_user):
             location = data['location']
             category = data['category']
             description = data['description']
-            business = Business(user_id=user_id, name=name, location=location, category=category, description=description)
+            business = Business(
+                user_id=user_id,
+                name=name,
+                location=location,
+                category=category,
+                description=description)
             db.session.add(business)
             if business:
                 return make_json_reply('message', 'business ' + str(
@@ -48,7 +53,7 @@ def update_business(current_user, businessId):
         user_id = user_information.id
         if check_business_by_id.user_id == user_id:
             if name != '' and name != check_business_by_id.name:
-                check_business_by_id.name = name 
+                check_business_by_id.name = name
             if location != '' and location != check_business_by_id.location:
                 check_business_by_id.location = location
             if category != '' and category != check_business_by_id.category:
@@ -58,10 +63,11 @@ def update_business(current_user, businessId):
             db.session.add(check_business_by_id)
             if check_business_by_id:
                 return make_json_reply(
-                    'message', 'successfully updated business ' + str(name)), 201
+                    'message',
+                    'successfully updated business ' + str(name)), 201
             else:
                 return make_json_reply('message',
-                                   'Failure updating ' + str(name)), 400
+                                       'Failure updating ' + str(name)), 400
     else:
         return make_json_reply('message', 'Business id does not exist'), 400
 

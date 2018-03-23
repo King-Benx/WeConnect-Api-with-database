@@ -20,7 +20,7 @@ def register_new_user():
                                             and password is not set
                                             and username is not set):
             user = User(username=username, email=email, password=password)
-            db.session.add(user);
+            db.session.add(user)
             if user:
                 return make_json_reply(
                     'message', 'Successfully created user ' + str(username) +

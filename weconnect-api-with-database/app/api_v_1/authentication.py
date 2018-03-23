@@ -51,7 +51,7 @@ def login():
     if user.check_password(auth.password):
         token = jwt.encode(
             {
-                'id':user.id,
+                'id': user.id,
                 'exp':
                 datetime.datetime.utcnow() + datetime.timedelta(minutes=20)
             },
