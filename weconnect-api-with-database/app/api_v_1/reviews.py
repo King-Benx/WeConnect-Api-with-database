@@ -12,7 +12,7 @@ def post_review(current_user, businessId):
     # create a review for a business
     data = request.get_json()
     if len(data.keys()) == 1:
-        user_information = User.query.filter_by(username=current_user[0])
+        user_information = User.query.filter_by(username=current_user.username)
         user_id = user_information.id
         business_id = int(businessId)
         if Business.query.get_or_404(business_id):

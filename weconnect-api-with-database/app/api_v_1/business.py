@@ -13,7 +13,7 @@ def register_business(current_user):
     data = request.get_json()
     if data:
         if (len(data.keys()) == 4):
-            user_information = User.query.filter_by(username=current_user[0])
+            user_information = User.query.filter_by(username=current_user.username)
             user_id = user_information.id
             name = data['name']
             location = data['location']
@@ -49,7 +49,7 @@ def update_business(current_user, businessId):
         location = data['location']
         category = data['category']
         description = data['description']
-        user_information = User.query.filter_by(username=current_user[0])
+        user_information = User.query.filter_by(username=current_user.username)
         user_id = user_information.id
         if check_business_by_id.user_id == user_id:
             if name != '' and name != check_business_by_id.name:
@@ -78,7 +78,7 @@ def delete_business(current_user, businessId):
     # delete business by id
     check_business_by_id = Business.query.get_or_404(int(businessId))
     business_name = check_business_by_id.name
-    user_information = User.query.filter_by(username=current_user[0])
+    user_information = User.query.filter_by(username=current_user.username)
     user_id = user_information.id
     if user_id == check_business_by_id.user_id:
         if db.session.delete(check_business_by_id):

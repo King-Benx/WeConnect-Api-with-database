@@ -20,7 +20,7 @@ def token_required(f):
                                    'Unauthorized access token is missing'), 401
         try:
             data = jwt.decode(token, Config.SECRET_KEY)
-            current_user = User.query.get(user_id=int(data['id']))
+            current_user = User.query.get(int(data['id'])).first()
         except:
             return make_json_reply('message', 'Token is invalid'), 401
         return f(current_user, *args, **kwargs)
