@@ -8,7 +8,7 @@ from ..functions import make_json_reply
 
 @api.route('/api/v1/auth/register', methods=['POST'])
 def register_new_user():
-    # register new user into the system
+    """Register new user into system basing on a username, email and password given in the json"""
     data = request.get_json(force=True)
     if len(data.keys()) == 3:
         username = data['username']
@@ -40,7 +40,7 @@ def register_new_user():
 @api.route('/api/v1/auth/logout', methods=['POST'])
 @token_required
 def logout_user(current_user):
-    # This logs out user from the application
+    """Logout current user from the system"""
     request.authorization = None
     current_user = None
     if not request.authorization:
@@ -55,20 +55,19 @@ def logout_user(current_user):
 @api.route('/api/v1/auth/reset-password', methods=['POST'])
 @token_required
 def reset_password(current_user):
-    # This resets the password of a user back to password if an email has been given
+    """Changes the password of a user to new_password in json set"""
     data = request.get_json()
-    if (len(data.keys()) == 2):
-        username = data['username']
+    if (len(data.keys()) == 1):
         password = data['new_password']
-        user_data = User.query.filter_by(username=username).first()
+        user_data = User.query.get(current_user.id)
         user_data.password = password
         db.session.add(user_data)
         if user_data.check_password(password):
             return make_json_reply(
-                'message', 'password has been reset to ' + str(password)), 200
+                'message', 'password has been set to ' + str(password)), 200
         else:
             return make_json_reply(
                 'message', 'failure resetting password, username invalid'), 400
     else:
-        return make_json_reply('message',
-                               'couldn\'t reset password missing fields'), 400
+        return make_json_reply(
+            'message', 'couldn\'t set password due missing fields'), 400

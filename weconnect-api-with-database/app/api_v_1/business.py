@@ -9,7 +9,7 @@ from ..functions import make_json_reply
 @api.route('/api/v1/businesses', methods=['POST'])
 @token_required
 def register_business(current_user):
-    # register new business into the system
+    """register new business into the system basing on name,location,category and description sent in json"""
     data = request.get_json()
     if data:
         if (len(data.keys()) == 4):
@@ -40,33 +40,44 @@ def register_business(current_user):
 @api.route('/api/v1/businesses/<businessId>', methods=['PUT'])
 @token_required
 def update_business(current_user, businessId):
-    # update business
+    """update an authenticated user's business"""
     check_business_by_id = Business.query.get(int(businessId))
     if check_business_by_id:
         data = request.get_json()
-        name = data['name']
-        location = data['location']
-        category = data['category']
-        description = data['description']
-        user_information = User.query.filter_by(username=current_user.username)
-        user_id = user_information.id
-        if check_business_by_id.user_id == user_id:
-            if name != '' and name != check_business_by_id.name:
+        if 'name' in data.keys():
+            name = data['name']
+        else:
+            name = None
+        if 'location' in data.keys():
+            location = data['location']
+        else:
+            location = None
+        if 'category' in data.keys():
+            category = data['category']
+        else:
+            category = None
+        if 'description' in data.keys():
+            description = data['description']
+        else:
+            description = None
+        if check_business_by_id.user_id == current_user.id:
+            if name != '' and name != check_business_by_id.name and name is not None:
                 check_business_by_id.name = name
-            if location != '' and location != check_business_by_id.location:
+            if location != '' and location != check_business_by_id.location and location is not None:
                 check_business_by_id.location = location
-            if category != '' and category != check_business_by_id.category:
+            if category != '' and category != check_business_by_id.category and category is not None:
                 check_business_by_id.category = category
-            if description != '' and description != check_business_by_id.description:
+            if description != '' and description != check_business_by_id.description and description is not None:
                 check_business_by_id.description = description
             db.session.add(check_business_by_id)
             if check_business_by_id:
+                return make_json_reply('message',
+                                       'successfully updated business ' +
+                                       check_business_by_id.name), 201
+            else:
                 return make_json_reply(
                     'message',
-                    'successfully updated business ' + str(name)), 201
-            else:
-                return make_json_reply('message',
-                                       'Failure updating ' + str(name)), 400
+                    'Failure updating ' + check_business_by_id.name), 400
     else:
         return make_json_reply('message', 'Business id does not exist'), 400
 
@@ -74,7 +85,7 @@ def update_business(current_user, businessId):
 @api.route('/api/v1/businesses/<businessId>', methods=['DELETE'])
 @token_required
 def delete_business(current_user, businessId):
-    # delete business by id
+    """authenticated user deletes a business created by them basing on the business's id"""
     check_business_by_id = Business.query.get(int(businessId))
     if check_business_by_id and check_business_by_id.user_id == current_user.id:
         business_name = check_business_by_id.name
@@ -92,7 +103,7 @@ def delete_business(current_user, businessId):
 @api.route('/api/v1/businesses', methods=['GET'])
 @token_required
 def retrieve_all_businesses(current_user):
-    # retrieve all businesses
+    """retrieve all businesses"""
     if Business.query.count() > 0:
         businesses = Business.query.all()
         return jsonify('Businesses ',
@@ -106,7 +117,7 @@ def retrieve_all_businesses(current_user):
 @api.route('/api/v1/businesses/<businessId>', methods=['GET'])
 @token_required
 def retrieve_a_business(current_user, businessId):
-    # retrieve a single businesses
+    """retrieve an existant single business"""
     if Business.query.get(int(businessId)):
         specific_business = Business.query.get_or_404(int(businessId))
         if specific_business:

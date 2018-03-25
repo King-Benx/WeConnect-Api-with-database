@@ -12,34 +12,34 @@ def post_review(current_user, businessId):
     # create a review for a business
     data = request.get_json()
     if len(data.keys()) == 1:
-        user_information = User.query.filter_by(username=current_user.username)
-        user_id = user_information.id
+        user_id = current_user.id
         business_id = int(businessId)
-        if Business.query.get_or_404(business_id):
-            review = data['review']
-            review = Review(user_id, business_id, review)
+        if Business.query.get(business_id):
+            user_review = data['review']
+            review = Review(
+                user_id=user_id, business_id=business_id, review=user_review)
             db.session.add(review)
             if review:
                 return make_json_reply('message',
                                        'review successfully created'), 201
-            else:
-                return make_json_reply(
-                    'message',
-                    'cannot create review due to missing fields'), 400
         else:
             return make_json_reply(
                 'message',
-                'cannot create review fro none existant business'), 400
+                'cannot create review for none existant business'), 400
+    else:
+        return make_json_reply(
+            'message', 'cannot create review due to missing fields'), 400
 
 
 @api.route('/api/v1/businesses/<businessId>/reviews', methods=['GET'])
 @token_required
 def get_reviews(current_user, businessId):
     # get reviews for business
-    if Business.query.get_404(int(businessId)):
+    if Business.query.get(int(businessId)):
         reviews = Review.query.filter_by(business_id=int(businessId))
-        if reviews:
-            return jsonify(reviews), 200
+        if Review.query.filter_by(business_id=int(businessId)).count() > 0:
+            return jsonify('Reviews',
+                           [review.to_json() for review in reviews]), 200
         else:
             return make_json_reply('message', 'No reviews for business'), 200
     else:

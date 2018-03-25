@@ -11,7 +11,7 @@ from ..functions import make_json_reply
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        # checks token and creates a current_user object with users information
+        """checks token and creates a current_user object with users information"""
         token = None
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
@@ -30,7 +30,7 @@ def token_required(f):
 
 @api.route('/api/v1/auth/login', methods=['POST'])
 def login():
-    # This logs a registered user into system and creates a unique token for them
+    """Login registered users into systems and assign a token"""
     auth = request.authorization
 
     if not auth or not auth.username and auth.password:
