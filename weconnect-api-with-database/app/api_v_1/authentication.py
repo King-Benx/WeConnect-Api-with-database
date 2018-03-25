@@ -1,7 +1,7 @@
 import jwt
 import datetime
 from flask import jsonify, request, url_for, make_response
-from ..models import User
+from ..models import User, BlackListedTokens
 from config import Config
 from . import api
 from functools import wraps
@@ -13,8 +13,14 @@ def token_required(f):
     def decorated(*args, **kwargs):
         """checks token and creates a current_user object with users information"""
         token = None
-        if 'x-access-token' in request.headers:
+        if 'x-access-token' in request.headers and BlackListedTokens.query.filter_by(
+                token=request.headers['x-access-token']).count() == 0:
             token = request.headers['x-access-token']
+        else:
+            return make_json_reply(
+                'Error',
+                'Token no longer valid, user signed out! Login again ' + str(
+                    url_for('api.login', _external=True))), 401
         if not token:
             return make_json_reply('message ',
                                    'Unauthorized access token is missing'), 401
@@ -39,6 +45,9 @@ def login():
                 'WWW-Authenticate':
                 'Basic Realm="url_for(\'api.login\',_external=True)"'
             })
+    if User.query.filter_by(username=auth.username).count() == 0:
+        return make_response("Could not verify! wrong username, Try again " +
+                             str(url_for('api.login', _external=True))), 401
 
     user = User.query.filter_by(username=auth.username).first()
     if not user.check_password(auth.password):
@@ -59,5 +68,5 @@ def login():
         return make_json_reply('Use Token', token.decode('UTF-8')), 200
     else:
         return make_response(
-            "Could not verify! if you are not a user, register otherwise try again"
+            "Could not verify! if you are not a user, register otherwise try to Login again"
             + str(url_for('api.login', _external=True))), 401

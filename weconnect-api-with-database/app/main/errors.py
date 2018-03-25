@@ -1,6 +1,7 @@
 from . import main
 from flask import request, jsonify
 
+
 @main.app_errorhandler(404)
 def page_not_known(e):
     """Error handler for unknown routes"""

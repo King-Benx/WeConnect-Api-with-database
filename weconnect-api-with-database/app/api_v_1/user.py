@@ -1,6 +1,6 @@
 from flask import request, url_for, session
 from . import api
-from ..models import User
+from ..models import User, BlackListedTokens
 from .. import db
 from .authentication import token_required
 from ..functions import make_json_reply
@@ -43,7 +43,11 @@ def logout_user(current_user):
     """Logout current user from the system"""
     request.authorization = None
     current_user = None
-    if not request.authorization:
+    blacklist_token = request.headers['x-access-token']
+    blacklist = BlackListedTokens(token=blacklist_token)
+    db.session.add(blacklist)
+    db.session.commit()
+    if blacklist_token and not request.authorization:
         return make_json_reply('message',
                                'You have been successfully logout'), 200
     else:

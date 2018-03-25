@@ -10,8 +10,13 @@ class User(db.Model):
         db.String(64), unique=True, nullable=False, index=True)
     email = db.Column(db.String(64), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    businesses = db.relationship('Business', backref='user', lazy='dynamic', cascade='all, delete-orphan')
-    reviews = db.relationship('Review', backref='user', lazy='dynamic', cascade='all, delete-orphan')
+    businesses = db.relationship(
+        'Business',
+        backref='user',
+        lazy='dynamic',
+        cascade='all, delete-orphan')
+    reviews = db.relationship(
+        'Review', backref='user', lazy='dynamic', cascade='all, delete-orphan')
 
     def __repr__(self):
         return 'User %r' % self.username
@@ -37,13 +42,16 @@ class Business(db.Model):
     location = db.Column(db.String(64), nullable=False)
     category = db.Column(db.String(64), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    reviews = db.relationship('Review', backref='business', lazy='dynamic', cascade='all, delete-orphan')
+    reviews = db.relationship(
+        'Review',
+        backref='business',
+        lazy='dynamic',
+        cascade='all, delete-orphan')
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(
-    ), onupdate=db.func.current_timestamp())
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-
+    date_modified = db.Column(
+        db.DateTime,
+        default=db.func.current_timestamp(),
+        onupdate=db.func.current_timestamp())
 
     def __repr__(self):
         return 'Business name %r' % self.name
@@ -58,7 +66,7 @@ class Business(db.Model):
             'description': self.description,
             'Date Created': self.date_created,
             'Last Modified': self.date_modified,
-            'Created By': User.query.get(self.created_by).username
+            'Created By': User.query.get(self.user_id).username
         }
         return json_business
 
@@ -71,9 +79,10 @@ class Review(db.Model):
     business_id = db.Column(db.Integer, db.ForeignKey('businesses.id'))
     review = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(
-    ), onupdate=db.func.current_timestamp())
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    date_modified = db.Column(
+        db.DateTime,
+        default=db.func.current_timestamp(),
+        onupdate=db.func.current_timestamp())
 
     def __repr__(self):
         return 'Review %r' % self.review
@@ -84,6 +93,16 @@ class Review(db.Model):
             'Review: ': self.review,
             'Date Created': self.date_created,
             'Last Modified': self.date_modified,
-            'Created By': User.query.get(self.created_by).username
+            'Created By': User.query.get(self.user_id).username
         }
         return json_review
+
+
+class BlackListedTokens(db.Model):
+    """Blacklist tokens at logout """
+    __tablename__ = 'blackLists'
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(128), nullable=False, unique=True)
+
+    def __repr__(self):
+        return 'Blacklisted Token : %r' % self.token
