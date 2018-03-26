@@ -133,3 +133,16 @@ def retrieve_a_business(current_user, businessId):
             'message',
             'No businesses registered with that id currently, view all businesses at '
             + str(url_for('api.retrieve_all_businesses', _external=True))), 400
+
+
+@api.route('/api/v1/businesses/q/<name>', methods=['GET'])
+@token_required
+def retrieve_a_business_by_name(current_user, name):
+    """search for a business by name"""
+    if Business.query.filter_by(name=name).count() > 0:
+        businesses = Business.query.filter_by(name=name)
+        return jsonify('Businesses ',
+                       [business.to_json() for business in businesses]), 200
+    else:
+        return make_json_reply(
+            'Results', 'No businesses with that name registered currently!'), 404
