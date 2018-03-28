@@ -1,0 +1,74 @@
+Endpoint for updating a registered businesses by its creator
+---
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: x-access-token
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
+  - name: id
+    in: path
+    description: ID of business to return
+    required: true
+    type: integer
+    format: int64
+  - name: body
+    in: body
+    description: The new details to update a business
+    required: true
+    schema :
+      $ref: '#/definitions/business-update'
+definitions:
+  Business:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      user_id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      location:
+        type: string
+      category:
+        type: string
+      description:
+        type: string
+      date_created:
+        type: string
+        format: date-time
+      date_modified:
+        type: string
+        format: date-time
+  business-update:
+    type: object
+    properties:
+      name:
+        type: string
+      location:
+        type: string
+      category:
+        type: string
+      description:
+        type: string  
+    
+responses:
+  200:
+    description: Successfully updated business
+    schema:
+      $ref: '#/definitions/Business'
+    examples:
+     [{
+      "Message": "successfully updated business"
+    }]
+  404:
+    description: Failure updating business
+  401:
+    description: Invalid token / User signed out 
+  

@@ -1,4 +1,5 @@
 from flask import request, url_for, session, jsonify
+from flasgger import swag_from
 from . import api
 from .. import db
 from ..models import Business, User
@@ -7,6 +8,7 @@ from ..functions import make_json_reply
 
 
 @api.route('/api/v1/businesses', methods=['POST'])
+@swag_from('swagger/businesses/create_business.yml')
 @token_required
 def register_business(current_user):
     """register new business into the system basing on name,location,category and description sent in json"""
@@ -38,6 +40,7 @@ def register_business(current_user):
 
 
 @api.route('/api/v1/businesses/<businessId>', methods=['PUT'])
+@swag_from('swagger/businesses/update_business.yml')
 @token_required
 def update_business(current_user, businessId):
     """update an authenticated user's business"""
@@ -83,6 +86,7 @@ def update_business(current_user, businessId):
 
 
 @api.route('/api/v1/businesses/<businessId>', methods=['DELETE'])
+@swag_from('swagger/businesses/delete_business_by_id.yml')
 @token_required
 def delete_business(current_user, businessId):
     """authenticated user deletes a business created by them basing on the business's id"""
@@ -101,6 +105,7 @@ def delete_business(current_user, businessId):
 
 
 @api.route('/api/v1/businesses', methods=['GET'])
+@swag_from('swagger/businesses/retrieve_all_businesses.yml')
 @token_required
 def retrieve_all_businesses(current_user):
     """retrieve all businesses"""
@@ -115,6 +120,7 @@ def retrieve_all_businesses(current_user):
 
 
 @api.route('/api/v1/businesses/<businessId>', methods=['GET'])
+@swag_from('swagger/businesses/retrieve_business_by_id.yml')
 @token_required
 def retrieve_a_business(current_user, businessId):
     """retrieve an existant single business"""
