@@ -1,6 +1,7 @@
 import jwt
 import datetime
 from flask import jsonify, request, url_for, make_response
+from flasgger import swag_from
 from ..models import User, BlackListedTokens
 from config import Config
 from . import api
@@ -35,6 +36,7 @@ def token_required(f):
 
 
 @api.route('/api/v1/auth/login', methods=['POST'])
+@swag_from('swagger/users/login_user.yml')
 def login():
     """Login registered users into systems and assign a token"""
     auth = request.authorization

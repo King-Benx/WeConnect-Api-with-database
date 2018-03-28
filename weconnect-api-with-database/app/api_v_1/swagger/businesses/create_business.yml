@@ -1,5 +1,7 @@
 Endpoint for creating a new businesses
 ---
+tags:
+  - Business
 consumes:
   - application/json
 produces:
@@ -53,7 +55,7 @@ definitions:
         type: string  
     
 responses:
-  200:
+  201:
     description: Business successfully created
     schema:
       $ref: '#/definitions/Business'

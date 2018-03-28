@@ -1,4 +1,5 @@
 from flask import request, url_for, session
+from flasgger import swag_from
 from . import api
 from ..models import User, BlackListedTokens
 from .. import db
@@ -7,6 +8,7 @@ from ..functions import make_json_reply
 
 
 @api.route('/api/v1/auth/register', methods=['POST'])
+@swag_from('swagger/users/create_user.yml')
 def register_new_user():
     """Register new user into system basing on a username, email and password given in the json"""
     data = request.get_json(force=True)
@@ -38,6 +40,7 @@ def register_new_user():
 
 # More work to be done on signing out
 @api.route('/api/v1/auth/logout', methods=['POST'])
+@swag_from('swagger/users/logout_user.yml')
 @token_required
 def logout_user(current_user):
     """Logout current user from the system"""
@@ -57,6 +60,7 @@ def logout_user(current_user):
 
 
 @api.route('/api/v1/auth/reset-password', methods=['POST'])
+@swag_from('swagger/users/reset_password.yml')
 @token_required
 def reset_password(current_user):
     """Changes the password of a user to new_password in json set"""

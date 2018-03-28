@@ -1,5 +1,7 @@
 Endpoint for updating a registered businesses by its creator
 ---
+tags:
+  - Business
 consumes:
   - application/json
 produces:
@@ -10,9 +12,9 @@ parameters:
     type: string
     description: JWT token authorization
     required: true
-  - name: id
+  - name: businessId
     in: path
-    description: ID of business to return
+    description: ID of business to update
     required: true
     type: integer
     format: int64

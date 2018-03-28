@@ -1,5 +1,7 @@
 Endpoint returning a list of all registered businesses
 ---
+tags:
+  - Business
 parameters:
   - name: x-access-token
     in: header
