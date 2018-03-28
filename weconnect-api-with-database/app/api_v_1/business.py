@@ -135,14 +135,46 @@ def retrieve_a_business(current_user, businessId):
             + str(url_for('api.retrieve_all_businesses', _external=True))), 400
 
 
-@api.route('/api/v1/businesses/q/<name>', methods=['GET'])
-@token_required
-def retrieve_a_business_by_name(current_user, name):
-    """search for a business by name"""
-    if Business.query.filter_by(name=name).count() > 0:
-        businesses = Business.query.filter_by(name=name)
-        return jsonify('Businesses ',
-                       [business.to_json() for business in businesses]), 200
-    else:
-        return make_json_reply(
-            'Results', 'No businesses with that name registered currently!'), 404
+# @api.route('/api/v1/businesses?q=<name>', methods=['GET'])
+# @token_required
+# def retrieve_a_business_by_name(current_user, q):
+#     """search for a business by name using the q parameter"""
+    
+#     print(q)
+#     # if Business.query.filter_by(name=name).count() > 0:
+#     #     businesses = Business.query.filter_by(name=name)
+#     #     return jsonify('Businesses ',
+#     #                    [business.to_json() for business in businesses]), 200
+#     # else:
+#     #     return make_json_reply(
+#     #         'Results',
+#     #         'No businesses with that name registered currently!'), 404
+
+
+# @api.route(
+#     '/api/v1/businesses?<filter>=<filter_value>', methods=['GET'])
+# @token_required
+# def retrieve_all_businesses_by_filter(current_user, filter, filter_value):
+#     """Filter businesses basing on category"""
+#     if filter == 'category':
+#         if Business.query.filter_by(category=filter_value).count() > 0:
+#             businesses = Business.query.filter_by(category=filter_value)
+#             return jsonify('Businesses ',
+#                            [business.to_json()
+#                             for business in businesses]), 200
+#         else:
+#             return make_json_reply(
+#                 'Results',
+#                 'No businesses registered under category ' + filter_value), 404
+#     elif filter == 'location':
+#         if Business.query.filter_by(location=filter_value).count() > 0:
+#             businesses = Business.query.filter_by(location=filter_value)
+#             return jsonify('Businesses ',
+#                            [business.to_json()
+#                             for business in businesses]), 200
+#         else:
+#             return make_json_reply(
+#                 'Results',
+#                 'No businesses registered located in ' + filter_value), 404
+#     else:
+#         return make_json_reply('Error', 'Unknown filter ' + filter), 400
