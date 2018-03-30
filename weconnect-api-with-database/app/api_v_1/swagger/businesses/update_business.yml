@@ -53,13 +53,16 @@ definitions:
     properties:
       name:
         type: string
+        example: "business 1"
       location:
         type: string
+        example: "location 1"
       category:
         type: string
+        example: "category 1"
       description:
         type: string  
-    
+        example: "business 1 description"
 responses:
   200:
     description: Successfully updated business

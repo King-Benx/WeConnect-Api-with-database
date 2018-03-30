@@ -51,7 +51,7 @@ definitions:
     properties:
       review:
         type: string
-    
+        example: "review 1 about business"
 responses:
   201:
     description: Review successfully created

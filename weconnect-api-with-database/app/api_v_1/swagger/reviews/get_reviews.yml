@@ -18,6 +18,16 @@ parameters:
     required: true
     type: integer
     format: int64
+  - name: page
+    in: query
+    type: integer
+    format: int64
+    description: Page to show
+  - name: limit
+    in: query
+    type: integer
+    format: int64
+    description: Number of reviews to show
 definitions:
   Review:
     type: object

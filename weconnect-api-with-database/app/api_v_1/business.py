@@ -1,3 +1,5 @@
+import urllib
+from urllib.parse import urlencode
 from flask import request, url_for, session, jsonify
 from flasgger import swag_from
 from . import api
@@ -39,7 +41,7 @@ def register_business(current_user):
             'message', 'cannot create business due to missing fields'), 400
 
 
-@api.route('/api/v1/businesses/<businessId>', methods=['PUT'])
+@api.route('/api/v1/businesses/<int:businessId>', methods=['PUT'])
 @swag_from('swagger/businesses/update_business.yml')
 @token_required
 def update_business(current_user, businessId):
@@ -85,7 +87,7 @@ def update_business(current_user, businessId):
         return make_json_reply('message', 'Business id does not exist'), 400
 
 
-@api.route('/api/v1/businesses/<businessId>', methods=['DELETE'])
+@api.route('/api/v1/businesses/<int:businessId>', methods=['DELETE'])
 @swag_from('swagger/businesses/delete_business_by_id.yml')
 @token_required
 def delete_business(current_user, businessId):
@@ -110,16 +112,35 @@ def delete_business(current_user, businessId):
 def retrieve_all_businesses(current_user):
     """retrieve all businesses"""
     if Business.query.count() > 0:
-        businesses = Business.query.all()
-        return jsonify('Businesses ',
-                       [business.to_json() for business in businesses]), 200
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', Business.query.count(), type=int)
+        pagination = Business.query.paginate(
+            page, per_page=limit, error_out=False)
+        businesses = pagination.items
+        prev = None
+        if pagination.has_prev:
+            prev = url_for(
+                'api.retrieve_all_businesses', page=page - 1, _external=True)
+        next = None
+        if pagination.has_next:
+            next = url_for(
+                'api.retrieve_all_businesses', page=page + 1, _external=True)
+        return jsonify({
+            'Businesses ': [business.to_json() for business in businesses],
+            'prev':
+            prev,
+            'next':
+            next,
+            'count':
+            pagination.total
+        }), 200
     else:
         return make_json_reply(
             'message', 'No businesses registered currently, register one at ' +
             str(url_for('api.register_business', _external=True))), 404
 
 
-@api.route('/api/v1/businesses/<businessId>', methods=['GET'])
+@api.route('/api/v1/businesses/<int:businessId>', methods=['GET'])
 @swag_from('swagger/businesses/retrieve_business_by_id.yml')
 @token_required
 def retrieve_a_business(current_user, businessId):
@@ -141,46 +162,84 @@ def retrieve_a_business(current_user, businessId):
             + str(url_for('api.retrieve_all_businesses', _external=True))), 400
 
 
-# @api.route('/api/v1/businesses?q=<name>', methods=['GET'])
-# @token_required
-# def retrieve_a_business_by_name(current_user, q):
-#     """search for a business by name using the q parameter"""
-    
-#     print(q)
-#     # if Business.query.filter_by(name=name).count() > 0:
-#     #     businesses = Business.query.filter_by(name=name)
-#     #     return jsonify('Businesses ',
-#     #                    [business.to_json() for business in businesses]), 200
-#     # else:
-#     #     return make_json_reply(
-#     #         'Results',
-#     #         'No businesses with that name registered currently!'), 404
+@api.route('/api/v1/businesses/search', methods=['GET'])
+@swag_from('swagger/businesses/search_business.yml')
+@token_required
+def retrieve_a_business_by_name(current_user):
+    """search for a business by name using the q parameter"""
+    business_name = str(request.args.get('q'))
+    filter_type = str(request.args.get('filter_type'))
+    filter_value = str(request.args.get('filter_value'))
+    results = Business.query.filter_by(name=business_name)
+    if filter_type and filter_value:
+        if filter_type == 'category':
+            results = Business.query.filter_by(
+                name=business_name, category=filter_value)
+        if filter_type == 'location':
+            results = Business.query.filter_by(
+                name=business_name, location=filter_value)
+
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', results.count(), type=int)
+    pagination = results.paginate(page, per_page=limit, error_out=False)
+    search_results = pagination.items
+    prev = None
+    if pagination.has_prev:
+        prev = url_for(
+            'api.retrieve_a_business_by_name', page=page - 1, _external=True)
+    next = None
+    if pagination.has_next:
+        next = url_for(
+            'api.retrieve_a_business_by_name', page=page + 1, _external=True)
+    if search_results:
+        return jsonify({
+            'Searched Business Results ':
+            [business.to_json() for business in search_results],
+            'prev':
+            prev,
+            'next':
+            next,
+            'count':
+            pagination.total
+        }), 200
+    else:
+        return make_json_reply(
+            'message', 'No businesses registered called ' + business_name), 404
 
 
-# @api.route(
-#     '/api/v1/businesses?<filter>=<filter_value>', methods=['GET'])
-# @token_required
-# def retrieve_all_businesses_by_filter(current_user, filter, filter_value):
-#     """Filter businesses basing on category"""
-#     if filter == 'category':
-#         if Business.query.filter_by(category=filter_value).count() > 0:
-#             businesses = Business.query.filter_by(category=filter_value)
-#             return jsonify('Businesses ',
-#                            [business.to_json()
-#                             for business in businesses]), 200
-#         else:
-#             return make_json_reply(
-#                 'Results',
-#                 'No businesses registered under category ' + filter_value), 404
-#     elif filter == 'location':
-#         if Business.query.filter_by(location=filter_value).count() > 0:
-#             businesses = Business.query.filter_by(location=filter_value)
-#             return jsonify('Businesses ',
-#                            [business.to_json()
-#                             for business in businesses]), 200
-#         else:
-#             return make_json_reply(
-#                 'Results',
-#                 'No businesses registered located in ' + filter_value), 404
-#     else:
-#         return make_json_reply('Error', 'Unknown filter ' + filter), 400
+@api.route('/api/v1/businesses/filter', methods=['GET'])
+@swag_from('swagger/businesses/filter_business.yml')
+@token_required
+def filter_business(current_user):
+    """filter business by either location or category"""
+    filter_type = str(request.args.get('filter_type'))
+    filter_value = str(request.args.get('filter_value'))
+    if filter_type == 'category':
+        results = Business.query.filter_by(category=filter_value)
+    if filter_type == 'location':
+        results = Business.query.filter_by(location=filter_value)
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', results.count(), type=int)
+    pagination = results.paginate(page, per_page=limit, error_out=False)
+    filter_results = pagination.items
+    prev = None
+    if pagination.has_prev:
+        prev = url_for('api.filter_business', page=page - 1, _external=True)
+    next = None
+    if pagination.has_next:
+        next = url_for('api.filter_business', page=page + 1, _external=True)
+    if filter_results:
+        return jsonify({
+            'Business Results ':
+            [business.to_json() for business in filter_results],
+            'prev':
+            prev,
+            'next':
+            next,
+            'count':
+            pagination.total
+        }), 200
+    else:
+        return make_json_reply(
+            'message', 'No businesses registered with ' + str(filter_type) +
+            ' = ' + str(filter_value)), 404

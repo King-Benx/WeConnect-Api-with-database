@@ -1,3 +1,4 @@
+from flask import url_for
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -58,15 +59,28 @@ class Business(db.Model):
 
     def to_json(self):
         json_business = {
-            'id': self.id,
-            'user_id': self.user_id,
-            'name': self.name,
-            'location': self.location,
-            'category': self.category,
-            'description': self.description,
-            'Date Created': self.date_created,
-            'Last Modified': self.date_modified,
-            'Created By': User.query.get(self.user_id).username
+            'id':
+            self.id,
+            'user_id':
+            self.user_id,
+            'name':
+            self.name,
+            'location':
+            self.location,
+            'category':
+            self.category,
+            'description':
+            self.description,
+            'Date Created':
+            self.date_created,
+            'Review count':
+            self.reviews.count(),
+            'Review url':
+            url_for('api.get_reviews', businessId=self.id, _external=True),
+            'Last Modified':
+            self.date_modified,
+            'Created By':
+            User.query.get(self.user_id).username
         }
         return json_business
 

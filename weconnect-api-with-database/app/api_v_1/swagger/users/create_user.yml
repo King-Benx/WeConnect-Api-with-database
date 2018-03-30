@@ -31,11 +31,13 @@ definitions:
     properties:
       username:
         type: string
+        example: "user"
       email:
         type: string
+        example: "johndoe@mail.com"
       password:
         type: string 
-    
+        example: "pass"
 responses:
   201:
     description: Successfully created user
