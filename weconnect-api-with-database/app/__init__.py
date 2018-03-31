@@ -3,8 +3,27 @@ from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger
 from config import config
 
+template = {
+  "swagger": "2.0",
+  "info": {
+    "title": "WeConnect API with postgres",
+    "description": "WeConnect provides a platform that brings businesses and individuals together. This platform                     creates awareness for businesses and gives the users the ability to write reviews about the                     businesses they have interacted with.",
+    "contact": {
+      "responsibleOrganization": "Andela",
+      "responsibleDeveloper": "Asiimwe Benard",
+      "email": "benard.asiimwe@andela.com",
+    },
+    "version": "1.0.0"
+  },
+  "basePath": "/api/v1/",  # base bash for blueprint registration
+  "schemes": [
+    "http",
+    "https"
+  ]
+}
+
 db = SQLAlchemy()
-swagger = Swagger()
+swagger = Swagger(template=template)
 
 
 def create_app(config_name):
