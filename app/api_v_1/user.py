@@ -64,7 +64,7 @@ def logout_user(current_user):
 @token_required
 def reset_password(current_user):
     """Changes the password of a user to new_password in json set"""
-    data = request.get_json()
+    data = request.get_json(force=True)
     if (len(data.keys()) == 1):
         password = data['new_password']
         user_data = User.query.get(current_user.id)

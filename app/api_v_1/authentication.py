@@ -39,36 +39,32 @@ def token_required(f):
 @swag_from('swagger/users/login_user.yml')
 def login():
     """Login registered users into systems and assign a token"""
-    auth = request.authorization
-
-    if not auth or not auth.username and auth.password:
-        return make_response(
-            "Could not verify", 401, {
-                'WWW-Authenticate':
-                'Basic Realm="url_for(\'api.login\',_external=True)"'
-            })
-    if User.query.filter_by(username=auth.username).count() == 0:
-        return make_response("Could not verify! wrong username, Try again " +
-                             str(url_for('api.login', _external=True))), 401
-
-    user = User.query.filter_by(username=auth.username).first()
-    if not user.check_password(auth.password):
-        return make_response(
-            "Could not verify! if you are not a user register otherwise try again",
-            401, {
-                'WWW-Authenticate':
-                'Basic Realm =' + str(url_for('api.login', _external=True))
-            })
-    if user.check_password(auth.password):
-        token = jwt.encode(
-            {
-                'id': user.id,
-                'exp':
-                datetime.datetime.utcnow() + datetime.timedelta(minutes=20)
-            },
-            Config.SECRET_KEY)
-        return make_json_reply('Use Token', token.decode('UTF-8')), 200
+    data = request.get_json(force=True)
+    if len(data.keys()) == 2:
+        email = data['email']
+        password = data['password']
+        if User.query.filter_by(email=email).count() == 0:
+            return make_response(
+                "Could not verify! wrong email, Try again " +
+                str(url_for('api.login', _external=True))), 401
+        else:
+            user = User.query.filter_by(email=email).first()
+            password_validity = user.check_password(password)
+            if not password_validity:
+                return make_response(
+                    "Could not verify! password incorrect, Try again " +
+                    str(url_for('api.login', _external=True))), 401
+            else:
+                token = jwt.encode(
+                    {
+                        'id':
+                        user.id,
+                        'exp':
+                        datetime.datetime.utcnow() +
+                        datetime.timedelta(minutes=20)
+                    },
+                    Config.SECRET_KEY)
+                return make_json_reply('Use Token', token.decode('UTF-8')), 200
     else:
-        return make_response(
-            "Could not verify! if you are not a user, register otherwise try to Login again"
-            + str(url_for('api.login', _external=True))), 401
+        return make_response("Unknown user, register now or try to Login again"
+                             + str(url_for('api.login', _external=True))), 404
