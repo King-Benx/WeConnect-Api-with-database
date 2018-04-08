@@ -72,8 +72,10 @@ responses:
      [{
       "Message": "successfully updated business"
     }]
+  400:
+    description: Failure updating due to insufficient rights
   404:
-    description: Failure updating business
+    description: Business id does not exist
   401:
     description: Invalid token / User signed out 
   

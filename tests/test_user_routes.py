@@ -24,5 +24,5 @@ class TestUserRoutes(TestBase):
 
     def test_logout_user(self):
         response = self.client.post(
-            url_for('api.logout_user'),headers={'x-access-token': self.token})
+            url_for('api.logout_user'), headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 200)

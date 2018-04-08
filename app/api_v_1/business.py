@@ -14,7 +14,7 @@ from ..functions import make_json_reply
 @token_required
 def register_business(current_user):
     """register new business into the system basing on name,location,category and description sent in json"""
-    data = request.get_json()
+    data = request.get_json(force=True)
     if data:
         if (len(data.keys()) == 4):
             user_id = current_user.id
@@ -48,7 +48,7 @@ def update_business(current_user, businessId):
     """update an authenticated user's business"""
     check_business_by_id = Business.query.get(int(businessId))
     if check_business_by_id:
-        data = request.get_json()
+        data = request.get_json(force=True)
         if 'name' in data.keys():
             name = data['name']
         else:
@@ -65,6 +65,7 @@ def update_business(current_user, businessId):
             description = data['description']
         else:
             description = None
+
         if check_business_by_id.user_id == current_user.id:
             if name != '' and name != check_business_by_id.name and name is not None:
                 check_business_by_id.name = name
@@ -75,16 +76,14 @@ def update_business(current_user, businessId):
             if description != '' and description != check_business_by_id.description and description is not None:
                 check_business_by_id.description = description
             db.session.add(check_business_by_id)
-            if check_business_by_id:
-                return make_json_reply('message',
-                                       'successfully updated business ' +
-                                       check_business_by_id.name), 201
-            else:
-                return make_json_reply(
-                    'message',
-                    'Failure updating ' + check_business_by_id.name), 400
+            return make_json_reply('message',
+                                   'successfully updated business ' +
+                                   check_business_by_id.name), 200
+        else:
+            return make_json_reply(
+                'message', 'Failure updating due to insufficient rights'), 400
     else:
-        return make_json_reply('message', 'Business id does not exist'), 400
+        return make_json_reply('message', 'Business id does not exist'), 404
 
 
 @api.route('/api/v1/businesses/<int:businessId>', methods=['DELETE'])

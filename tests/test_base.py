@@ -6,6 +6,8 @@ from app import create_app, db
 from app.api_v_1 import api
 from config import Config
 from app.api_v_1.user import User
+from app.api_v_1.business import Business
+from app.api_v_1.reviews import Review
 
 
 class TestBase(unittest.TestCase):
@@ -15,9 +17,18 @@ class TestBase(unittest.TestCase):
         self.app_context.push()
         db.drop_all()
         db.create_all()
-        default_user = User(
+        self.default_user = User(
             username="user", password="pass", email="johndoe@mail.com")
-        db.session.add(default_user)
+        self.default_business = Business(
+            user_id=1,
+            name='business 1',
+            location='location 1',
+            description='business 1 description',
+            category='category 1')
+        self.default_review = Review(
+            user_id=1, business_id=1, review='review 1')
+        db.session.add_all(
+            [self.default_user, self.default_business, self.default_review])
         db.session.commit()
         self.client = self.app.test_client()
 
@@ -37,12 +48,20 @@ class TestBase(unittest.TestCase):
         'new_password': 'newpass',
     }
 
-    new_business = {
+    create_new_business = {
         'name': 'business 1',
         'location': 'location 1',
         'category': 'category 1',
         'description': 'business description 1'
     }
+
+    create_business_update = {
+        'name': ' new business 1',
+        'location': 'new location 1',
+        'category': 'new category 1',
+        'description': 'new business description 1'
+    }
+
     token = jwt.encode(
         {
             'id': 1,

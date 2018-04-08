@@ -21,9 +21,8 @@ def post_review(current_user, businessId):
             review = Review(
                 user_id=user_id, business_id=business_id, review=user_review)
             db.session.add(review)
-            if review:
-                return make_json_reply('message',
-                                       'review successfully created'), 201
+            return make_json_reply('message',
+                                   'review successfully created'), 201
         else:
             return make_json_reply(
                 'message',
