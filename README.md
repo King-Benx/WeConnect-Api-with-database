@@ -26,7 +26,7 @@ businesses they have interacted with.
 
     **```$ virtualenv weconnect-env```**
 
-    **```$ source weconnect-env/bin/activate`**
+    **```$ source weconnect-env/bin/activate```**
 
 ### MORE INFORMATION ON VIRTUAL ENVIRONMENTS
 
