@@ -26,6 +26,21 @@ class ProductionConfig(Config):
     pass
 
 
+class StagingConfig(Config):
+    """Staging configurations"""
+    POSTGRES = {
+        'user': 'postgres',
+        'pw': 'pass',
+        'db': 'weconnect',
+        'host': 'localhost',
+        'port': '5432',
+    }
+    DEVELOPMENT = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        'WECONNECT-DATABASE') or 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+
 class TestingConfig(Config):
     """Testing Configurations"""
     TESTING = True
@@ -38,5 +53,6 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'staging': StagingConfig,
     'default': DevelopmentConfig
 }

@@ -21,14 +21,21 @@ businesses they have interacted with.
 * Jquery - JavaScript Library used
 * Flask - Python Framework used
 ## RUNNING THE APPLICATION
+1. Create a folder weconnect-api-with-database
+   Clone repository to the folder
+   ``` git clone https://github.com/King-Benx/WeConnect-Api-with-data-structures.git ```
 1. A file that contains all necessary extensions exists within the app, to get all dependencies run the following command
 > **pip3 install -r requirements.txt**
 2. Configurations are handled by the **config.py** file and any environmental variables should occur in this file.
-3. To launch the application run the following command in your terminal
+3. Set up postgresql database and copy connection string in format.
+
+    ``` DATABASE_URL='postgres://<db_user_name>:<password>@localhost/<database_name>' ```
+
+4. To launch the application run the following command in your terminal
 > **python manage.py runserver**
-4. To launch the shell run the following command in your terminal
+5. To launch the shell run the following command in your terminal
 > **python manage.py shell**
-5. To run tests on the application, run the following command in your terminal
+6. To run tests on the application, run the following command in your terminal
 > **python manage.py run_test**
 ## Author
 Asiimwe Benard
