@@ -33,12 +33,13 @@ businesses they have interacted with.
 
    **``` source weconnect-env/bin/activate ```**
 
- ### MORE INFORMATION ON VIRTUAL ENVIRONMENTS ![how to create a virtual environment in python](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+ ### MORE INFORMATION ON VIRTUAL ENVIRONMENTS 
+ ![how to create a virtual environment in python](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
 
 3. A file that contains all necessary extensions exists within the app, to get all dependencies run the following command
 
-  **``` pip3 install -r requirements.txt ```**
+    **``` pip3 install -r requirements.txt ```**
 
 4. Configurations are handled by the **config.py** file and any environmental variables should occur in this file.
 5. Set up postgresql database and copy connection string in format.
@@ -47,14 +48,14 @@ businesses they have interacted with.
 
 6. To launch the application run the following command in your terminal
 
-**``` python manage.py runserver ```**
+    **``` python manage.py runserver ```**
 
 7. To launch the shell run the following command in your terminal
 
-**``` python manage.py shell ```**
+    **``` python manage.py shell ```**
 
 8. To run tests on the application, run the following command in your terminal
 
-**``` python manage.py run_test ```**
+    **``` python manage.py run_test ```**
 ## Author
 Asiimwe Benard
