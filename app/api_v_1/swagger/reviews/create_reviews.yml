@@ -1,0 +1,68 @@
+Endpoint for creating a review for an existing business
+---
+tags:
+  - Reviews
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: x-access-token
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
+  - name: businessId
+    in: path
+    description: "ID of business to return"
+    required: true
+    type: integer
+    format: int64
+  - name: body
+    in: body
+    description: The details of a review
+    required: true
+    schema :
+      $ref: '#/definitions/review-create'
+definitions:
+  Review:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      user_id:
+        type: integer
+        format: int64
+      business_id:
+        type: integer
+        format: int64
+      review:
+        type: string
+        type: string
+      date_created:
+        type: string
+        format: date-time
+      date_modified:
+        type: string
+        format: date-time
+  review-create:
+    type: object
+    properties:
+      review:
+        type: string
+        example: "review 1 about business"
+responses:
+  201:
+    description: Review successfully created
+    schema:
+      $ref: '#/definitions/Review'
+    examples:
+     [{
+      "Message": "Review successfully created"
+    }]
+  400:
+    description: Cannot create review for none existant business / Cannot create review due to missing fields
+  401:
+    description: Invalid token / User signed out 
+  
