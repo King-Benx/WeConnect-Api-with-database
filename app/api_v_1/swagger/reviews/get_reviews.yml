@@ -75,9 +75,7 @@ responses:
     }
   ]]
   404:
-    description: No reviews for business
-  400:
-    description: None existant business id
+    description: No reviews for business/ None existant business id
   401:
     description: Invalid token / User signed out 
   

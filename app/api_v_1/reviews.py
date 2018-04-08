@@ -26,7 +26,7 @@ def post_review(current_user, businessId):
         else:
             return make_json_reply(
                 'message',
-                'cannot create review for none existant business'), 400
+                'cannot create review for none existant business'), 404
     else:
         return make_json_reply(
             'message', 'cannot create review due to missing fields'), 400
@@ -70,4 +70,4 @@ def get_reviews(current_user, businessId):
         else:
             return make_json_reply('message', 'No reviews for business'), 404
     else:
-        return make_json_reply('message', 'None existant business id'), 400
+        return make_json_reply('message', 'None existant business id'), 404
