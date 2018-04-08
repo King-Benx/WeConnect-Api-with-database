@@ -158,7 +158,7 @@ def retrieve_a_business(current_user, businessId):
         return make_json_reply(
             'message',
             'No businesses registered with that id currently, view all businesses at '
-            + str(url_for('api.retrieve_all_businesses', _external=True))), 400
+            + str(url_for('api.retrieve_all_businesses', _external=True))), 404
 
 
 @api.route('/api/v1/businesses/search', methods=['GET'])

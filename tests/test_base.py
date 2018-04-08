@@ -51,6 +51,8 @@ class TestBase(unittest.TestCase):
 
     empty_login_user = {}
 
+    empty_business = {}
+
     wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
     set_new_password = {'new_password': 'newpass'}
 
