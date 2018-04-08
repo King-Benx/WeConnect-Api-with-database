@@ -42,10 +42,23 @@ class TestBase(unittest.TestCase):
         'password': 'pass',
         'email': 'johndoe@mail.com'
     }
+    wrong_create_demo_user = {
+        'username': 'wrong user',
+        'password': 'wrong pass'
+    }
+    empty_create_demo_user = {'username': '', 'password': '', 'email': ''}
     login_user = {'password': 'pass', 'email': 'johndoe@mail.com'}
 
+    empty_login_user = {}
+
+    wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
     set_new_password = {
-        'new_password': 'newpass',
+        'new_password': 'newpass'
+    }
+
+    wrong_password_credentials = {
+        'password': 'wrongpass',
+        'email': 'johndoe@mail.com'
     }
 
     create_new_business = {
@@ -62,10 +75,8 @@ class TestBase(unittest.TestCase):
         'description': 'new business description 1'
     }
 
-    create_review ={
-        'review':'review 1'
-    }
-    
+    create_review = {'review': 'review 1'}
+
     token = jwt.encode(
         {
             'id': 1,
