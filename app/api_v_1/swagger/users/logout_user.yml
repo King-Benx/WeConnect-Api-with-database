@@ -1,0 +1,39 @@
+Endpoint for logging out a new User
+---
+tags:
+  - User
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: x-access-token
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      email:
+        type: string
+      password_hash:
+        type: string
+responses:
+  200:
+    description: You have been successfully logout
+    schema:
+      $ref: '#/definitions/User'
+    examples:
+     [{
+      "Message": "You have been successfully logout"
+    }]
+  400:
+    description: Something went wrong, please try again/ Invalid token / User signed out
+  

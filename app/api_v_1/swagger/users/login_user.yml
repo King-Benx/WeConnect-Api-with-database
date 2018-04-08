@@ -1,0 +1,49 @@
+Endpoint for logging in a new User
+---
+tags:
+  - User
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: body
+    in: body
+    description: The email and password of a registered user
+    required: true
+    schema :
+      $ref: '#/definitions/user-login'
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      email:
+        type: string
+      password_hash:
+        type: string
+  user-login:
+    type: object
+    properties:
+      email:
+        type: string
+        example: "johndoe@mail.com"
+      password:
+        type: string 
+        example: "pass"
+responses:
+  200:
+    description: You have been successfully logged in
+    schema:
+      $ref: '#/definitions/User'
+    examples:
+     [{
+      "Use Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjIyMzM2MDgsImlkIjoxfQ.wx_sNnmhdUOtG4ohL-anyhpaQZZAgEDsy1SJiiSP55s"
+    }]
+  401:
+    description: Could not verify! wrong email/wrong password Try again! Register otherwise try to Login again
+  
