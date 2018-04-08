@@ -7,31 +7,20 @@ businesses they have interacted with.
 ## FEATURES THAT THE APPLICATION ENCOMPASSES
 1. An API connecting to a postgress database
 
-## FlOW OF WEB APPLICATION
-![wireframe](https://github.com/King-Benx/WeConnect-ui-designs/blob/master/designs/wireframes/wireframes.png)
-
-## LINK TO WeConnect on Github Pages
-### [WeConnect](https://king-benx.github.io/)
-
-## LINK To WeConnect-API using non-persistent data
-### [WeConnect-API (no database)](https://evening-gorge-56404.herokuapp.com/)
-
 ## BUILT WITH
-* Bootstrap 3 - The Web framework used
-* Jquery - JavaScript Library used
 * Flask - Python Framework used
 ## RUNNING THE APPLICATION
 1. Create a folder weconnect-api-with-database
 
    Clone repository to the folder
 
-   **``` git clone https://github.com/King-Benx/WeConnect-Api-with-data-structures.git ```**
+   **``` git clone https://github.com/King-Benx/WeConnect-Api-with-database.git ```**
 
 2. Create a virtual environment that you are going to use while running the application locally
    
-   **``` virtualenv weconnect-env ```**
+   **``` $ virtualenv weconnect-env ```**
 
-   **``` source weconnect-env/bin/activate ```**
+   **``` $ source weconnect-env/bin/activate ```**
 
  ### MORE INFORMATION ON VIRTUAL ENVIRONMENTS 
  ![how to create a virtual environment in python](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
