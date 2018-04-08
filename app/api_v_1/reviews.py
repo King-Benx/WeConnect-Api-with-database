@@ -12,7 +12,7 @@ from .. import db
 @token_required
 def post_review(current_user, businessId):
     """ create a review for a business"""
-    data = request.get_json()
+    data = request.get_json(force=True)
     if len(data.keys()) == 1:
         user_id = current_user.id
         business_id = int(businessId)

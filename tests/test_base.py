@@ -62,6 +62,10 @@ class TestBase(unittest.TestCase):
         'description': 'new business description 1'
     }
 
+    create_review ={
+        'review':'review 1'
+    }
+    
     token = jwt.encode(
         {
             'id': 1,
