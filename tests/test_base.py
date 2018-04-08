@@ -52,9 +52,7 @@ class TestBase(unittest.TestCase):
     empty_login_user = {}
 
     wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
-    set_new_password = {
-        'new_password': 'newpass'
-    }
+    set_new_password = {'new_password': 'newpass'}
 
     wrong_password_credentials = {
         'password': 'wrongpass',
