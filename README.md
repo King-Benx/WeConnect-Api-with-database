@@ -1,5 +1,5 @@
 # WeConnect-Api-with-database
-
+[![Build Status](https://travis-ci.org/King-Benx/WeConnect-Api-with-database.svg?branch=master)](https://travis-ci.org/King-Benx/WeConnect-Api-with-database)
 ## DESCRIPTION
 
 WeConnect provides a platform that brings businesses and individuals together. This platform
