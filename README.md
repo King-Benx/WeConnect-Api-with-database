@@ -6,6 +6,18 @@ WeConnect provides a platform that brings businesses and individuals together. T
 creates awareness for businesses and gives the users the ability to write reviews about the
 businesses they have interacted with.
 
+## LINK TO API
+![WeConnect-Api-with-database](https://weconnect-api-database.herokuapp.com)
+
+A default user has already been created
+
+### CREDENTIALS
+
+    {
+      'email':'johndoe@mail.com',
+      'password':'pass'
+    }
+
 ## FEATURES THAT THE APPLICATION ENCOMPASSES
 
 1.  An API connecting to a postgress database
