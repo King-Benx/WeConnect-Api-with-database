@@ -13,10 +13,10 @@ A default user has already been created
 
 ### CREDENTIALS
 
-    **```{
+    **{
         'email':'johndoe@mail.com',
         'password':'pass'
-        }```**
+        }**
 
 ## FEATURES THAT THE APPLICATION ENCOMPASSES
 
