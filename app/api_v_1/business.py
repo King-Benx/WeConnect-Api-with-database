@@ -205,7 +205,6 @@ def retrieve_a_business_by_name(current_user):
         return make_json_reply(
             'message', 'No businesses registered called ' + business_name), 404
 
-
 @api.route('/api/v1/businesses/filter', methods=['GET'])
 @swag_from('swagger/businesses/filter_business.yml')
 @token_required
@@ -215,8 +214,10 @@ def filter_business(current_user):
     filter_value = str(request.args.get('filter_value'))
     if filter_type == 'category':
         results = Business.query.filter_by(category=filter_value)
-    if filter_type == 'location':
+    elif filter_type == 'location':
         results = Business.query.filter_by(location=filter_value)
+    else:
+        return make_json_reply('Error', 'Unknown filter type'), 400
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', results.count(), type=int)
     pagination = results.paginate(page, per_page=limit, error_out=False)

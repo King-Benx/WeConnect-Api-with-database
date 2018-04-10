@@ -76,4 +76,5 @@ responses:
     description: No businesses registered 
   401:
     description: Invalid token / User signed out 
-  
+  400:
+    description: Unknown filter type

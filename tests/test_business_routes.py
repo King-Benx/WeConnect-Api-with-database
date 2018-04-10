@@ -152,6 +152,13 @@ class TestBusinessRoutes(TestBase):
             '?filter_type=location&filter_value=location 1&page=1&limit=1')
         self.assertTrue(response.status_code == 401)
 
+    def test_wrong_filter_at_filter_business(self):
+        response = self.client.get(
+            url_for('api.filter_business') +
+            '?filter_type=wrong filter&filter_value=location 1&page=1&limit=1',
+            headers={'x-access-token': self.token})
+        self.assertTrue(response.status_code == 400)
+
     def test_unknown_filter_at_filter_business(self):
         response = self.client.get(
             url_for('api.filter_business') +

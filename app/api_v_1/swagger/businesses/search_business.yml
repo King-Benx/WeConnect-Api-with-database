@@ -79,4 +79,3 @@ responses:
     description: No businesses by that name
   401:
     description: Invalid token / User signed out 
-  
