@@ -19,7 +19,7 @@ class TestUserRoutes(TestBase):
     def test_empty_credentials_create_uer(self):
         response = self.client.post(
             url_for('api.register_new_user'),
-            data=json.dumps(self.empty_create_demo_user))
+            data=json.dumps(self.empty_record))
         self.assertTrue(response.status_code == 400)
 
     def test_login(self):
@@ -29,7 +29,7 @@ class TestUserRoutes(TestBase):
 
     def test_empty_login_credentials(self):
         response = self.client.post(
-            url_for('api.login'), data=json.dumps(self.empty_login_user))
+            url_for('api.login'), data=json.dumps(self.empty_record))
         self.assertTrue(response.status_code == 404)
 
     def test_wrong_email_at_login(self):

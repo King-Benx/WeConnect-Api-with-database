@@ -1,6 +1,6 @@
 import jwt
 import datetime
-from flask import jsonify, request, url_for, make_response
+from flask import request, url_for, make_response
 from flasgger import swag_from
 from ..models import User, BlackListedTokens
 from config import Config
