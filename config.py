@@ -25,7 +25,8 @@ class ProductionConfig(Config):
     """Production configurations"""
     POSTGRES = {
         'user': 'yugdidzdtdvtbs',
-        'pw': '382f60e76260d3ead5021451626b644aaa35753b49e5b0274085cd1f5bf71555',
+        'pw':
+        '382f60e76260d3ead5021451626b644aaa35753b49e5b0274085cd1f5bf71555',
         'db': 'd763a6843un291',
         'host': 'ec2-54-225-96-191.compute-1.amazonaws.com',
         'port': '5432',
@@ -33,7 +34,8 @@ class ProductionConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'WECONNECT-DATABASE') or 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+        'WECONNECT-DATABASE'
+    ) or 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 
 class StagingConfig(Config):
@@ -48,7 +50,8 @@ class StagingConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'WECONNECT-DATABASE') or 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+        'WECONNECT-DATABASE'
+    ) or 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 
 class TestingConfig(Config):

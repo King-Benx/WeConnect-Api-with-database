@@ -1,6 +1,4 @@
-import urllib
-from urllib.parse import urlencode
-from flask import request, url_for, session, jsonify
+from flask import request, url_for, jsonify
 from flasgger import swag_from
 from . import api
 from .. import db
@@ -204,6 +202,7 @@ def retrieve_a_business_by_name(current_user):
     else:
         return make_json_reply(
             'message', 'No businesses registered called ' + business_name), 404
+
 
 @api.route('/api/v1/businesses/filter', methods=['GET'])
 @swag_from('swagger/businesses/filter_business.yml')

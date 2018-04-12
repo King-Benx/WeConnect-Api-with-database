@@ -4,7 +4,7 @@ from . import api
 from ..models import User, BlackListedTokens
 from .. import db
 from .authentication import token_required
-from ..functions import make_json_reply
+from ..functions import make_json_reply, check_validity_of_mail, check_validity_of_username
 
 
 @api.route('/api/v1/auth/register', methods=['POST'])
@@ -21,15 +21,28 @@ def register_new_user():
                    and password != '') and (email is not set
                                             and password is not set
                                             and username is not set):
-            user = User(username=username, email=email, password=password)
-            db.session.add(user)
-            if user:
+            if User.query.filter_by(email=email).count() == 1:
+                return make_json_reply('Error',
+                                       'Email already exists, try again'), 400
+            elif check_validity_of_mail(email) == None:
+                return make_json_reply('Error', 'Invalid email'), 400
+            elif len(password) < 3:
+                return make_json_reply('Error', 'Password too short'), 400
+            elif len(username) < 3 or check_validity_of_username(
+                    username) == None:
                 return make_json_reply(
-                    'message', 'Successfully created user ' + str(username) +
-                    ' you can login using ' + str(
-                        url_for('api.login', _external=True))), 201
+                    'Error',
+                    'Username either too short or cannot start with a . '), 400
             else:
-                make_json_reply('message', 'Failure creating user'), 400
+                user = User(username=username, email=email, password=password)
+                db.session.add(user)
+                if user:
+                    return make_json_reply(
+                        'message', 'Successfully created user ' +
+                        str(username) + ' you can login using ' + str(
+                            url_for('api.login', _external=True))), 201
+                else:
+                    make_json_reply('message', 'Failure creating user'), 400
         else:
             return make_json_reply('message',
                                    'Values cannot be empty or not set'), 400
