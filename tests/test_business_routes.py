@@ -14,7 +14,6 @@ class TestBusinessRoutes(TestBase):
             data=json.dumps(self.create_new_business),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 201)
-        print(response)
 
     def test_missing_fields_at_register_business(self):
         response = self.client.post(
@@ -38,23 +37,20 @@ class TestBusinessRoutes(TestBase):
     # Tests for updating a busines
     def test_update_business(self):
         response = self.client.put(
-            url_for(
-                'api.update_business', businessId=1),
+            url_for('api.update_business', businessId=1),
             data=json.dumps(self.create_business_update),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 200)
 
     def test_unauthorized_user_at_update_business(self):
         response = self.client.put(
-            url_for(
-                'api.update_business', businessId=1),
+            url_for('api.update_business', businessId=1),
             data=json.dumps(self.create_business_update))
         self.assertTrue(response.status_code == 401)
 
     def test_no_data_at_update_business(self):
         response = self.client.put(
-            url_for(
-                'api.update_business', businessId=1),
+            url_for('api.update_business', businessId=1),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 400)
 
@@ -68,15 +64,13 @@ class TestBusinessRoutes(TestBase):
     # Tests for deleting a business
     def test_delete_business(self):
         response = self.client.delete(
-            url_for(
-                'api.delete_business', businessId=1),
+            url_for('api.delete_business', businessId=1),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 200)
 
     def test_unauthorized_user_at_delete_business(self):
         response = self.client.delete(
-            url_for(
-                'api.delete_business', businessId=1))
+            url_for('api.delete_business', businessId=1))
         self.assertTrue(response.status_code == 401)
 
     def test_wrong_business_id_at_delete_business(self):
@@ -99,17 +93,13 @@ class TestBusinessRoutes(TestBase):
     # Tests retrieval of a single business
     def test_retrieve_a_businesses(self):
         response = self.client.get(
-            url_for(
-                'api.retrieve_a_business',
-                businessId=1),
+            url_for('api.retrieve_a_business', businessId=1),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 200)
 
     def test_unauthorized_user_at_retrieve_a_business(self):
         response = self.client.get(
-            url_for(
-                'api.retrieve_a_business',
-                businessId=1))
+            url_for('api.retrieve_a_business', businessId=1))
         self.assertTrue(response.status_code == 401)
 
     def test_unknown_business_at_retrieve_a_business(self):

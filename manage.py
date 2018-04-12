@@ -18,6 +18,7 @@ def run_test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
 @manager.command
 def run_coverage():
     """Run tests with coverage"""

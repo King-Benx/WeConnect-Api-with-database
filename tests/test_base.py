@@ -2,7 +2,7 @@ import unittest
 import json
 import jwt
 import datetime
-from flask import request,url_for
+from flask import request, url_for
 from app import create_app, db
 from app.api_v_1 import api
 from config import Config
@@ -31,26 +31,48 @@ class TestBase(unittest.TestCase):
             url_for('api.post_review', businessId=1),
             data=json.dumps(self.create_review),
             headers={'x-access-token': self.token})
+
     def tearDown(self):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
     create_demo_user = {
-        'username': 'user',
-        'password': 'pass',
+        'username': 'johndoe',
+        'password': 'password',
         'email': 'johndoe@mail.com'
+    }
+    create_new_user = {
+        'username': 'janedoe',
+        'password': 'password2',
+        'email': 'janedoe@mail.com'
     }
     wrong_create_demo_user = {
         'username': 'wrong user',
         'password': 'wrong pass'
     }
+    short_password_at_create_demo_user = {
+        'username': 'johndoe',
+        'password': 'pa',
+        'email': 'johndoe@mail.com'
+    }
+    wrong_username_at_create_demo_user = {
+        'username': '.john',
+        'password': 'password',
+        'email': 'johndoe@mail.com'
+    }
+    wrong_email_at_create_demo_user = {
+        'username': 'johndoe',
+        'password': 'password',
+        'email': 'john.mail'
+    }
     empty_create_demo_user = {'username': '', 'password': '', 'email': ''}
-    login_user = {'password': 'pass', 'email': 'johndoe@mail.com'}
+    login_user = {'password': 'password', 'email': 'johndoe@mail.com'}
 
     empty_record = {}
 
     wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
+    wrong_email_at_format_at_login = {'password': 'pass', 'email': '.'}
     set_new_password = {'new_password': 'newpass'}
 
     wrong_password_credentials = {
@@ -73,4 +95,3 @@ class TestBase(unittest.TestCase):
     }
 
     create_review = {'review': 'review 1'}
-

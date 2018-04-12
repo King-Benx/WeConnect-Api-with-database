@@ -44,6 +44,8 @@ responses:
      [{
       "Use Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjIyMzM2MDgsImlkIjoxfQ.wx_sNnmhdUOtG4ohL-anyhpaQZZAgEDsy1SJiiSP55s"
     }]
+  400:
+    description: Invalid Email, Try again
   401:
     description: Could not verify! wrong email/wrong password Try again! Register otherwise try to Login again
   

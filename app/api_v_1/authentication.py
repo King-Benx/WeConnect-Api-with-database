@@ -6,7 +6,7 @@ from ..models import User, BlackListedTokens
 from config import Config
 from . import api
 from functools import wraps
-from ..functions import make_json_reply
+from ..functions import make_json_reply, check_validity_of_mail
 
 
 def token_required(f):
@@ -43,28 +43,32 @@ def login():
     if len(data.keys()) == 2:
         email = data['email']
         password = data['password']
-        if User.query.filter_by(email=email).count() == 0:
-            return make_response(
-                "Could not verify! wrong email, Try again " +
-                str(url_for('api.login', _external=True))), 401
-        else:
-            user = User.query.filter_by(email=email).first()
-            password_validity = user.check_password(password)
-            if not password_validity:
+        if check_validity_of_mail(email) != None:
+            if User.query.filter_by(email=email).count() == 0:
                 return make_response(
-                    "Could not verify! password incorrect, Try again " +
+                    "Could not verify! wrong email, Try again " +
                     str(url_for('api.login', _external=True))), 401
             else:
-                token = jwt.encode(
-                    {
-                        'id':
-                        user.id,
-                        'exp':
-                        datetime.datetime.utcnow() +
-                        datetime.timedelta(minutes=20)
-                    },
-                    Config.SECRET_KEY)
-                return make_json_reply('Use Token', token.decode('UTF-8')), 200
+                user = User.query.filter_by(email=email).first()
+                password_validity = user.check_password(password)
+                if not password_validity:
+                    return make_response(
+                        "Could not verify! password incorrect, Try again " +
+                        str(url_for('api.login', _external=True))), 401
+                else:
+                    token = jwt.encode(
+                        {
+                            'id':
+                            user.id,
+                            'exp':
+                            datetime.datetime.utcnow() +
+                            datetime.timedelta(minutes=20)
+                        },
+                        Config.SECRET_KEY)
+                    return make_json_reply('Use Token',
+                                           token.decode('UTF-8')), 200
+        else:
+            return make_json_reply('Error', 'Invalid Email, Try again'), 400
     else:
         return make_response("Unknown user, register now or try to Login again"
                              + str(url_for('api.login', _external=True))), 404

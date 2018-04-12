@@ -7,7 +7,7 @@ creates awareness for businesses and gives the users the ability to write review
 businesses they have interacted with.
 
 ## LINK TO API
-![WeConnect-Api-with-database](https://weconnect-api-database.herokuapp.com)
+### [WeConnect-API-with-postgres](https://weconnect-api-database.herokuapp.com)
 
 A default user has already been created
 
@@ -42,7 +42,7 @@ A default user has already been created
 
 ### MORE INFORMATION ON VIRTUAL ENVIRONMENTS
 
-![how to create a virtual environment in python](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+### [Setting up Virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
 
 3. A file that contains all necessary extensions exists within the app, to get all dependencies run the following command
 
