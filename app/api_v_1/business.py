@@ -157,14 +157,17 @@ def retrieve_a_business_by_name(current_user):
     business_name = str(request.args.get('q'))
     filter_type = str(request.args.get('filter_type'))
     filter_value = str(request.args.get('filter_value'))
-    results = Business.query.filter_by(name=business_name)
+    results = Business.query.filter(
+        Business.name.ilike('%' + business_name + '%'))
     if filter_type and filter_value:
         if filter_type == 'category':
             results = Business.query.filter_by(
-                name=business_name, category=filter_value)
+                name=business_name, category=filter_value).filter(
+                    Business.name.ilike('%' + business_name + '%'))
         if filter_type == 'location':
             results = Business.query.filter_by(
-                name=business_name, location=filter_value)
+                name=business_name, location=filter_value).filter(
+                    Business.name.ilike('%' + business_name + '%'))
 
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', results.count(), type=int)
