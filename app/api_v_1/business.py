@@ -27,12 +27,11 @@ def register_business(current_user):
                 category=category,
                 description=description)
             db.session.add(business)
-            if business:
-                return make_json_reply('Business ' + str(business.name) +
-                                       ' successfully created'), 201
-            else:
-                return make_json_reply(
-                    'Cannot create business due to missing fields'), 400
+            return make_json_reply('Business ' + str(business.name) +
+                                   ' successfully created'), 201
+        else:
+            return make_json_reply(
+                'Cannot create business due to missing fields'), 400
     else:
         return make_json_reply(
             'Cannot create business due to missing fields'), 400
