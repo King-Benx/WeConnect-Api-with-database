@@ -22,7 +22,8 @@ class TestBase(unittest.TestCase):
         login_test_user = self.client.post(
             url_for('api.login'), data=json.dumps(self.login_user))
         user_logged_in_data = json.loads(login_test_user.data.decode())
-        self.token = user_logged_in_data['Use Token']
+        self.token = user_logged_in_data['message']['token']
+
         self.client.post(
             url_for('api.register_business'),
             data=json.dumps(self.create_new_business),

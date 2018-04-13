@@ -45,7 +45,7 @@ responses:
       $ref: '#/definitions/User'
     examples:
      [{
-      "Message": "Successfully created user"
+      "message": "Successfully created user"
     }]
   400:
     description: Email already exists, try again / Username either too short or cannot start with a . / Password too short 

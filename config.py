@@ -68,5 +68,5 @@ config = {
     'production': ProductionConfig,
     'staging': StagingConfig,
     # 'default': DevelopmentConfig
-    'default':ProductionConfig
+    'default': DevelopmentConfig
 }

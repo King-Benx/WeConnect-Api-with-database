@@ -59,28 +59,15 @@ class Business(db.Model):
 
     def to_json(self):
         json_business = {
-            'id':
-            self.id,
-            'user_id':
-            self.user_id,
-            'name':
-            self.name,
-            'location':
-            self.location,
-            'category':
-            self.category,
-            'description':
-            self.description,
-            'Date Created':
-            self.date_created,
-            'Review count':
-            self.reviews.count(),
-            'Review url':
-            url_for('api.get_reviews', businessId=self.id, _external=True),
-            'Last Modified':
-            self.date_modified,
-            'Created By':
-            User.query.get(self.user_id).username
+            'id': self.id,
+            'user_id': self.user_id,
+            'name': self.name,
+            'location': self.location,
+            'category': self.category,
+            'description': self.description,
+            'date_created': self.date_created,
+            'last_modified': self.date_modified,
+            'created_by': User.query.get(self.user_id).username
         }
         return json_business
 
@@ -103,11 +90,11 @@ class Review(db.Model):
 
     def to_json(self):
         json_review = {
-            'Author: ': User.query.get(self.user_id).username,
-            'Review: ': self.review,
-            'Date Created': self.date_created,
-            'Last Modified': self.date_modified,
-            'Created By': User.query.get(self.user_id).username
+            'author': User.query.get(self.user_id).username,
+            'review: ': self.review,
+            'date_created': self.date_created,
+            'last_modified': self.date_modified,
+            'created_by': User.query.get(self.user_id).username
         }
         return json_review
 
