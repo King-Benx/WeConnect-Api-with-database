@@ -16,7 +16,7 @@ businesses they have interacted with.
 | ------- | ----- | ------------- |
 | POST | /api/v1/auth/login | Logs in a user |
 | POST | api/v1/auth/logout | Logs out a user |
-| POST | api/v1/auth/logout | Logs out a user |
+| POST | api/v1/auth/reset-password | Resets a users password |
 | POST | api/v1/auth/register | Register a new user |
 | GET | api/v1/businesses | Retrieves all businesses |
 | POST | api/v1/businesses | Creates a new business |
