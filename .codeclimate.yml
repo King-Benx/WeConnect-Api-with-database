@@ -29,4 +29,4 @@ checks:
       threshold: 200
   identical-code:
     config:
-threshold: 100
+      threshold: 100
