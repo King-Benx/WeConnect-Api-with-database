@@ -10,18 +10,23 @@ businesses they have interacted with.
 ## LINK TO API
 ### [WeConnect-API-with-postgres](https://weconnect-api-database.herokuapp.com)
 
-A default user has already been created
+## __Project captures the following routes__
 
-### CREDENTIALS
-
-    {
-      'email':'johndoe@mail.com',
-      'password':'pass'
-    }
-
-## FEATURES THAT THE APPLICATION ENCOMPASSES
-
-1.  An API connecting to a postgress database
+| REQUEST | ROUTE | FUNCTIONALITY |
+| ------- | ----- | ------------- |
+| POST | /api/v1/auth/login | Logs in a user |
+| POST | api/v1/auth/logout | Logs out a user |
+| POST | api/v1/auth/logout | Logs out a user |
+| POST | api/v1/auth/register | Register a new user |
+| GET | api/v1/businesses | Retrieves all businesses |
+| POST | api/v1/businesses | Creates a new business |
+| GET | api/v1/businesses/filter | Filter business by location/category |
+| GET | api/v1/businesses/search | Search for a business by name |
+| DELETE | api/v1/businesses/&lt;businessId&gt; | Delete a business |
+| GET | api/v1/businesses/&lt;businessId&gt; | Get a business by Id |
+| PUT | api/v1/businesses/&lt;businessId&gt; | Update a specific business  |
+| GET | api/v1/businesses/&lt;businessId&gt;/reviews | Get reviews of a business |
+| POST | ap1/v1/businesses/&lt;businessId&gt;/reviews | Post a review about a business|
 
 ## BUILT WITH
 
