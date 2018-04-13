@@ -1,4 +1,4 @@
-from flask import request, jsonify, session, url_for
+from flask import request, session, url_for
 from flasgger import swag_from
 from . import api
 from ..models import Review, User, Business
@@ -21,15 +21,13 @@ def post_review(current_user, businessId):
             review = Review(
                 user_id=user_id, business_id=business_id, review=user_review)
             db.session.add(review)
-            return make_json_reply('message',
-                                   'review successfully created'), 201
+            return make_json_reply('Review successfully created'), 201
         else:
             return make_json_reply(
-                'message',
-                'cannot create review for none existant business'), 404
+                'Cannot create review for none existant business'), 404
     else:
         return make_json_reply(
-            'message', 'cannot create review due to missing fields'), 400
+            'Cannot create review due to missing fields'), 400
 
 
 @api.route('/api/v1/businesses/<int:businessId>/reviews', methods=['GET'])
@@ -58,16 +56,14 @@ def get_reviews(current_user, businessId):
                 page=page + 1,
                 _external=True)
         if business_reviews:
-            return jsonify({
+            return make_json_reply({
                 'Reviews': [review.to_json() for review in business_reviews],
                 'prev':
                 prev,
                 'next':
-                next,
-                'count':
-                pagination.total
+                next
             }), 200
         else:
-            return make_json_reply('message', 'No reviews for business'), 404
+            return make_json_reply('No reviews for business'), 404
     else:
-        return make_json_reply('message', 'None existant business id'), 404
+        return make_json_reply('None existant business id'), 404

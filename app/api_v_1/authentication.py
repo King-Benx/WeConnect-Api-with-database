@@ -19,17 +19,15 @@ def token_required(f):
             token = request.headers['x-access-token']
         else:
             return make_json_reply(
-                'Error',
-                'Token no longer valid, user signed out! Login again ' + str(
-                    url_for('api.login', _external=True))), 401
+                'Token no longer valid, user signed out! Login again ' +
+                str(url_for('api.login', _external=True))), 401
         if not token:
-            return make_json_reply('message ',
-                                   'Unauthorized access token is missing'), 401
+            return make_json_reply('Unauthorized access token is missing'), 401
         try:
             data = jwt.decode(token, Config.SECRET_KEY)
             current_user = User.query.get(int(data['id']))
         except:
-            return make_json_reply('message', 'Token is invalid'), 401
+            return make_json_reply('Token is invalid'), 401
         return f(current_user, *args, **kwargs)
 
     return decorated
@@ -65,10 +63,13 @@ def login():
                             datetime.timedelta(minutes=20)
                         },
                         Config.SECRET_KEY)
-                    return make_json_reply('Use Token',
-                                           token.decode('UTF-8')), 200
+                    return make_json_reply({
+                        'username': user.username,
+                        'email': email,
+                        'token': token.decode('UTF-8')
+                    }), 200
         else:
-            return make_json_reply('Error', 'Invalid Email, Try again'), 400
+            return make_json_reply('Invalid Email, Try again'), 400
     else:
         return make_response("Unknown user, register now or try to Login again"
                              + str(url_for('api.login', _external=True))), 404

@@ -70,7 +70,7 @@ responses:
       $ref: '#/definitions/Business'
     examples:
      [{
-      "Message": "successfully updated business"
+      "message": "successfully updated business"
     }]
   400:
     description: Failure updating due to insufficient rights
