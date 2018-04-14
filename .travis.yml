@@ -8,6 +8,14 @@ install:
 # command to run tests
 script: 
   - python manage.py run_test
+  - pytest
+  - coverage run --source='.'  manage.py run_test
+  - coverage report
 
+# generate code climate report
+after_script:
+  - codeclimate-test-reporter
+
+# push report to coveralls.io
 after_success:
-  - coveralls
+- coveralls
