@@ -7,8 +7,7 @@ install:
   - pip install coveralls
 # command to run tests
 script: 
-  - python manage.py run_test
-  # - coverage run --source='.'  manage.py run_test
+  - coverage run --source='.'  manage.py run_test
   - coverage report
 
 # generate code climate report
