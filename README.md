@@ -1,14 +1,32 @@
 # WeConnect-Api-with-database
 [![Build Status](https://travis-ci.org/King-Benx/WeConnect-Api-with-database.svg?branch=master)](https://travis-ci.org/King-Benx/WeConnect-Api-with-database)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e8559133a6c764fb9fdf/maintainability)](https://codeclimate.com/github/King-Benx/WeConnect-Api-with-database/maintainability) [![Coverage Status](https://coveralls.io/repos/github/King-Benx/WeConnect-Api-with-database/badge.svg?branch=develop)](https://coveralls.io/github/King-Benx/WeConnect-Api-with-database?branch=develop)
 ## DESCRIPTION
 
 WeConnect provides a platform that brings businesses and individuals together. This platform
 creates awareness for businesses and gives the users the ability to write reviews about the
 businesses they have interacted with.
 
-## FEATURES THAT THE APPLICATION ENCOMPASSES
+## LINK TO API
+### [WeConnect-API-with-postgres](https://weconnect-api-database.herokuapp.com)
 
-1.  An API connecting to a postgress database
+## __Project captures the following routes__
+
+| REQUEST | ROUTE | FUNCTIONALITY |
+| ------- | ----- | ------------- |
+| POST | /api/v1/auth/login | Logs in a user |
+| POST | api/v1/auth/logout | Logs out a user |
+| POST | api/v1/auth/reset-password | Resets a users password |
+| POST | api/v1/auth/register | Register a new user |
+| GET | api/v1/businesses | Retrieves all businesses |
+| POST | api/v1/businesses | Creates a new business |
+| GET | api/v1/businesses/filter | Filter business by location/category |
+| GET | api/v1/businesses/search | Search for a business by name |
+| DELETE | api/v1/businesses/&lt;businessId&gt; | Delete a business |
+| GET | api/v1/businesses/&lt;businessId&gt; | Get a business by Id |
+| PUT | api/v1/businesses/&lt;businessId&gt; | Update a specific business  |
+| GET | api/v1/businesses/&lt;businessId&gt;/reviews | Get reviews of a business |
+| POST | ap1/v1/businesses/&lt;businessId&gt;/reviews | Post a review about a business|
 
 ## BUILT WITH
 
@@ -30,7 +48,7 @@ businesses they have interacted with.
 
 ### MORE INFORMATION ON VIRTUAL ENVIRONMENTS
 
-![how to create a virtual environment in python](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+### [Setting up Virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
 
 3. A file that contains all necessary extensions exists within the app, to get all dependencies run the following command
 

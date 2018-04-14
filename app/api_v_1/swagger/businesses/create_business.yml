@@ -64,7 +64,7 @@ responses:
       $ref: '#/definitions/Business'
     examples:
      [{
-      "Message": "Business successfully created"
+      "message": "Business successfully created"
     }]
   404:
     description: Failure creating business

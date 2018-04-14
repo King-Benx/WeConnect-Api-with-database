@@ -46,7 +46,7 @@ responses:
       $ref: '#/definitions/Business'
     examples:
      [{
-      "Message": "successfully deleted business"
+      "message": "successfully deleted business"
     }]
   404:
     description: Business id might not exist or you have no right to delete business

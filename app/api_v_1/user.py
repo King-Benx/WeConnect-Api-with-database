@@ -4,7 +4,7 @@ from . import api
 from ..models import User, BlackListedTokens
 from .. import db
 from .authentication import token_required
-from ..functions import make_json_reply
+from ..functions import make_json_reply, check_validity_of_mail, check_validity_of_username
 
 
 @api.route('/api/v1/auth/register', methods=['POST'])
@@ -21,21 +21,30 @@ def register_new_user():
                    and password != '') and (email is not set
                                             and password is not set
                                             and username is not set):
-            user = User(username=username, email=email, password=password)
-            db.session.add(user)
-            if user:
+            if User.query.filter_by(email=email).count() == 1:
+                return make_json_reply('Email already exists, try again'), 400
+            elif check_validity_of_mail(email) == None:
+                return make_json_reply('Invalid email'), 400
+            elif len(password) < 3:
+                return make_json_reply('Password too short'), 400
+            elif len(username) < 3 or check_validity_of_username(
+                    username) == None:
                 return make_json_reply(
-                    'message', 'Successfully created user ' + str(username) +
-                    ' you can login using ' + str(
-                        url_for('api.login', _external=True))), 201
+                    'Username either too short or cannot start with a . '), 400
             else:
-                make_json_reply('message', 'Failure creating user'), 400
+                user = User(username=username, email=email, password=password)
+                db.session.add(user)
+                if user:
+                    return make_json_reply('Successfully created user ' + str(
+                        username) + ' you can login using ' + str(
+                            url_for('api.login', _external=True))), 201
+                else:
+                    make_json_reply('Failure creating user'), 400
         else:
-            return make_json_reply('message',
-                                   'Values cannot be empty or not set'), 400
+            return make_json_reply('Values cannot be empty or not set'), 400
     else:
         return make_json_reply(
-            'message', 'Couldn\'t create user, some fields missing'), 400
+            'Couldn\'t create user, some fields missing'), 400
 
 
 # More work to be done on signing out
@@ -51,12 +60,10 @@ def logout_user(current_user):
     db.session.add(blacklist)
     db.session.commit()
     if blacklist_token and not request.authorization:
-        return make_json_reply('message',
-                               'You have been successfully logout'), 200
+        return make_json_reply('You have been successfully logout'), 200
     else:
-        return make_json_reply(
-            'message', 'Something went wrong, please try again ' +
-            str(url_for('api.logout_user', _external=True))), 400
+        return make_json_reply('Something went wrong, please try again ' + str(
+            url_for('api.logout_user', _external=True))), 400
 
 
 @api.route('/api/v1/auth/reset-password', methods=['POST'])
@@ -72,10 +79,10 @@ def reset_password(current_user):
         db.session.add(user_data)
         if user_data.check_password(password):
             return make_json_reply(
-                'message', 'password has been set to ' + str(password)), 200
+                'Password has been set to ' + str(password)), 200
         else:
             return make_json_reply(
-                'message', 'failure resetting password, username invalid'), 400
+                'Failure resetting password, username invalid'), 400
     else:
         return make_json_reply(
-            'message', 'couldn\'t set password due missing fields'), 400
+            'Couldn\'t set password due missing fields'), 400

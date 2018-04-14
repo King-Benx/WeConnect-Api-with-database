@@ -59,7 +59,7 @@ responses:
       $ref: '#/definitions/Review'
     examples:
      [{
-      "Message": "Review successfully created"
+      "message": "Review successfully created"
     }]
   400:
     description: Cannot create review for none existant business / Cannot create review due to missing fields

@@ -1,4 +1,5 @@
 import os
+import unittest
 from app import create_app, db
 from app.models import User, Business, Review
 from flask_script import Manager, Shell

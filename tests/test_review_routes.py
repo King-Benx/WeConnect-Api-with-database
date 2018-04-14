@@ -9,7 +9,7 @@ class TestReviewRoutes(TestBase):
     # Tests all routes concerning posting reviews
     def test_post_review(self):
         response = self.client.post(
-            url_for('api.post_review', businessId=self.default_business.id),
+            url_for('api.post_review', businessId=1),
             data=json.dumps(self.create_review),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 201)
@@ -27,17 +27,24 @@ class TestReviewRoutes(TestBase):
             data=json.dumps(self.create_review))
         self.assertTrue(response.status_code == 401)
 
+    def test_empty_review_at_post_review(self):
+        response = self.client.post(
+            url_for('api.post_review', businessId=1),
+            data=json.dumps(self.empty_record),
+            headers={'x-access-token': self.token})
+        self.assertTrue(response.status_code == 400)
+
     # Tests all routes concerning getting reviews
     def test_get_reviews(self):
         response = self.client.get(
-            url_for('api.get_reviews', businessId=self.default_business.id),
+            url_for('api.get_reviews', businessId=1),
             data=json.dumps(self.create_review),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 200)
 
     def test_unauthorized_user_at_get_reviews(self):
         response = self.client.get(
-            url_for('api.get_reviews', businessId=self.default_business.id),
+            url_for('api.get_reviews', businessId=1),
             data=json.dumps(self.create_review))
         self.assertTrue(response.status_code == 401)
 

@@ -1,13 +1,11 @@
 import unittest
+import json
 import jwt
 import datetime
-from flask import request
+from flask import request, url_for
 from app import create_app, db
 from app.api_v_1 import api
 from config import Config
-from app.api_v_1.user import User
-from app.api_v_1.business import Business
-from app.api_v_1.reviews import Review
 
 
 class TestBase(unittest.TestCase):
@@ -17,20 +15,23 @@ class TestBase(unittest.TestCase):
         self.app_context.push()
         db.drop_all()
         db.create_all()
-        self.default_user = User(
-            username="user", password="pass", email="johndoe@mail.com")
-        self.default_business = Business(
-            user_id=1,
-            name='business 1',
-            location='location 1',
-            description='business 1 description',
-            category='category 1')
-        self.default_review = Review(
-            user_id=1, business_id=1, review='review 1')
-        db.session.add_all(
-            [self.default_user, self.default_business, self.default_review])
-        db.session.commit()
         self.client = self.app.test_client()
+        self.client.post(
+            url_for('api.register_new_user'),
+            data=json.dumps(self.create_demo_user))
+        login_test_user = self.client.post(
+            url_for('api.login'), data=json.dumps(self.login_user))
+        user_logged_in_data = json.loads(login_test_user.data.decode())
+        self.token = user_logged_in_data['message']['token']
+
+        self.client.post(
+            url_for('api.register_business'),
+            data=json.dumps(self.create_new_business),
+            headers={'x-access-token': self.token})
+        self.client.post(
+            url_for('api.post_review', businessId=1),
+            data=json.dumps(self.create_review),
+            headers={'x-access-token': self.token})
 
     def tearDown(self):
         db.session.remove()
@@ -38,22 +39,41 @@ class TestBase(unittest.TestCase):
         self.app_context.pop()
 
     create_demo_user = {
-        'username': 'user',
-        'password': 'pass',
+        'username': 'johndoe',
+        'password': 'password',
         'email': 'johndoe@mail.com'
+    }
+    create_new_user = {
+        'username': 'janedoe',
+        'password': 'password2',
+        'email': 'janedoe@mail.com'
     }
     wrong_create_demo_user = {
         'username': 'wrong user',
         'password': 'wrong pass'
     }
+    short_password_at_create_demo_user = {
+        'username': 'johndoe',
+        'password': 'pa',
+        'email': 'johndoe@mail.com'
+    }
+    wrong_username_at_create_demo_user = {
+        'username': '.john',
+        'password': 'password',
+        'email': 'johndoe@mail.com'
+    }
+    wrong_email_at_create_demo_user = {
+        'username': 'johndoe',
+        'password': 'password',
+        'email': 'john.mail'
+    }
     empty_create_demo_user = {'username': '', 'password': '', 'email': ''}
-    login_user = {'password': 'pass', 'email': 'johndoe@mail.com'}
+    login_user = {'password': 'password', 'email': 'johndoe@mail.com'}
 
-    empty_login_user = {}
-
-    empty_business = {}
+    empty_record = {}
 
     wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
+    wrong_email_at_format_at_login = {'password': 'pass', 'email': '.'}
     set_new_password = {'new_password': 'newpass'}
 
     wrong_password_credentials = {
@@ -76,10 +96,3 @@ class TestBase(unittest.TestCase):
     }
 
     create_review = {'review': 'review 1'}
-
-    token = jwt.encode(
-        {
-            'id': 1,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=20)
-        },
-        Config.SECRET_KEY)

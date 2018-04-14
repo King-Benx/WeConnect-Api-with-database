@@ -66,8 +66,6 @@ responses:
       "Created By": "business creator", 
       "Date Created": "Sun, 25 Mar 2018 10:43:31 GMT", 
       "Last Modified": "Mon, 26 Mar 2018 10:23:28 GMT",
-      "Review count": 3,
-      "Review url":"https://.../api/v1/businesses/1/reviews", 
       "category": "category 1", 
       "description": "business 1 description", 
       "id": 1, 
@@ -79,4 +77,3 @@ responses:
     description: No businesses by that name
   401:
     description: Invalid token / User signed out 
-  
