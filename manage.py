@@ -1,6 +1,5 @@
 import os
 import unittest
-import coverage
 from app import create_app, db
 from app.models import User, Business, Review
 from flask_script import Manager, Shell
@@ -17,23 +16,6 @@ def run_test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
-
-
-@manager.command
-def run_coverage():
-    """Run tests with coverage"""
-    cov = coverage.coverage(branch=True, include='app/*', omit='*/__init__.py')
-    cov.start()
-    tests = unittest.TestLoader().discover('tests')
-    unittest.TextTestRunner(verbosity=2).run(tests)
-    cov.stop()
-    cov.save()
-    print('Test Coverage Summary')
-    cov.report()
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    coverage_dir = os.path.join(basedir, 'coverage')
-    cov.html_report(directory=coverage_dir)
-    cov.erase()
 
 
 @manager.command
