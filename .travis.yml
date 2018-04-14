@@ -8,7 +8,6 @@ install:
 # command to run tests
 script: 
   - python manage.py run_test
-  - pytest
   - coverage run --source='.'  manage.py run_test
   - coverage report
 
