@@ -64,6 +64,7 @@ def login():
                         },
                         Config.SECRET_KEY)
                     return make_json_reply({
+                        'user_status':'Successfully Logged in',
                         'username': user.username,
                         'email': email,
                         'token': token.decode('UTF-8')
