@@ -41,7 +41,8 @@ responses:
     schema:
       $ref: '#/definitions/User'
     examples:
-     ["message": { "usename":"johndoe",
+     ["message": {"user_status":"Successfully Logged in", 
+     "usename":"johndoe",
        "email":"johndoe@mail.com",
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjIyMzM2MDgsImlkIjoxfQ.wx_sNnmhdUOtG4ohL-anyhpaQZZAgEDsy1SJiiSP55s"
     }]
