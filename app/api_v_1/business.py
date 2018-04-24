@@ -4,7 +4,7 @@ from . import api
 from .. import db
 from ..models import Business, User
 from .authentication import token_required
-from ..functions import make_json_reply
+from ..functions import make_json_reply, check_validity_of_input
 
 
 @api.route('/api/v1/businesses', methods=['POST'])
@@ -13,28 +13,32 @@ from ..functions import make_json_reply
 def register_business(current_user):
     """register new business into the system basing on name,location,category and description sent in json"""
     data = request.get_json(force=True)
-    if data:
-        if (len(data.keys()) == 4):
-            user_id = current_user.id
-            name = data['name']
-            location = data['location']
-            category = data['category']
-            description = data['description']
-            business = Business(
-                user_id=user_id,
-                name=name,
-                location=location,
-                category=category,
-                description=description)
-            db.session.add(business)
-            return make_json_reply('Business ' + str(business.name) +
-                                   ' successfully created'), 201
-        else:
-            return make_json_reply(
-                'Cannot create business due to missing fields'), 400
-    else:
+    if not data:
         return make_json_reply(
             'Cannot create business due to missing fields'), 400
+    if (len(data.keys()) != 4):
+        return make_json_reply(
+            'Cannot create business due to missing fields'), 400
+    user_id = current_user.id
+    name = data['name']
+    location = data['location']
+    category = data['category']
+    description = data['description']
+    if check_validity_of_input(
+            name=name,
+            location=location,
+            category=category,
+            description=description) == False:
+        return make_json_reply('Fields cannot be empty'), 400
+    business = Business(
+        user_id=user_id,
+        name=name,
+        location=location,
+        category=category,
+        description=description)
+    db.session.add(business)
+    return make_json_reply(
+        'Business ' + str(business.name) + ' successfully created'), 201
 
 
 @api.route('/api/v1/businesses/<int:businessId>', methods=['PUT'])
@@ -85,16 +89,16 @@ def update_business(current_user, businessId):
 @token_required
 def delete_business(current_user, businessId):
     """authenticated user deletes a business created by them basing on the business's id"""
-    check_business_by_id = Business.query.get(int(businessId))
-    if check_business_by_id and check_business_by_id.user_id == current_user.id:
-        business_name = check_business_by_id.name
-        db.session.delete(check_business_by_id)
-        return make_json_reply(
-            'Successfully deleted business ' + str(business_name)), 200
-    else:
+    get_business_by_id = Business.query.get(int(businessId))
+    if not (get_business_by_id
+            and get_business_by_id.user_id == current_user.id):
         return make_json_reply(
             'Business id might not exist or you have no right to delete business'
         ), 404
+    business_name = check_business_by_id.name
+    db.session.delete(check_business_by_id)
+    return make_json_reply(
+        'Successfully deleted business ' + str(business_name)), 200
 
 
 @api.route('/api/v1/businesses', methods=['GET'])
