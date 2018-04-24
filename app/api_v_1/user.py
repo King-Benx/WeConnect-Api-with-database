@@ -31,7 +31,7 @@ def register_new_user():
         return make_json_reply('message', 'Password too short'), 400
     if len(username) < 3 or check_validity_of_username(username) == None:
         return make_json_reply(
-            'message'
+            'message',
             'Username either too short or cannot start with a . '), 400
     user = User(username=username, email=email, password=password)
     db.session.add(user)

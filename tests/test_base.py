@@ -53,14 +53,14 @@ class TestBase(unittest.TestCase):
         'password': 'wrong pass'
     }
     short_password_at_create_demo_user = {
-        'username': 'johndoe',
+        'username': 'janedoe',
         'password': 'pa',
-        'email': 'johndoe@mail.com'
+        'email': 'janedoe@mail.com'
     }
     wrong_username_at_create_demo_user = {
         'username': '.john',
         'password': 'password',
-        'email': 'johndoe@mail.com'
+        'email': 'janedoe@mail.com'
     }
     wrong_email_at_create_demo_user = {
         'username': 'johndoe',
