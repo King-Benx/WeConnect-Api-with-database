@@ -95,7 +95,7 @@ class TestUserRoutes(TestBase):
     def test_same_password_at_reset_password(self):
         response = self.client.post(
             url_for('api.reset_password'),
-            data=json.dumps(self.set_same_password)),
+            data=json.dumps(self.set_same_password),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 400)
 
