@@ -21,3 +21,7 @@ class TestFunctions(unittest.TestCase):
     def test_check_correct_validity_of_input(self):
         self.assertEqual(
             check_validity_of_input(username='john', password='pass'), True)
+        
+    def test_check_wrong_validity_of_input(self):
+        self.assertEqual(
+            check_validity_of_input(username=''), False)
