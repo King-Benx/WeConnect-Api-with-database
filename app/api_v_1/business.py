@@ -47,41 +47,31 @@ def register_business(current_user):
 def update_business(current_user, businessId):
     """update an authenticated user's business"""
     check_business_by_id = Business.query.get(int(businessId))
-    if check_business_by_id:
-        data = request.get_json(force=True)
-        if 'name' in data.keys():
-            name = data['name']
-        else:
-            name = None
-        if 'location' in data.keys():
-            location = data['location']
-        else:
-            location = None
-        if 'category' in data.keys():
-            category = data['category']
-        else:
-            category = None
-        if 'description' in data.keys():
-            description = data['description']
-        else:
-            description = None
-
-        if check_business_by_id.user_id == current_user.id:
-            if name != '' and name != check_business_by_id.name and name is not None:
-                check_business_by_id.name = name
-            if location != '' and location != check_business_by_id.location and location is not None:
-                check_business_by_id.location = location
-            if category != '' and category != check_business_by_id.category and category is not None:
-                check_business_by_id.category = category
-            if description != '' and description != check_business_by_id.description and description is not None:
-                check_business_by_id.description = description
-            db.session.add(check_business_by_id)
-            return make_json_reply('Successfully updated business ' +
-                                   check_business_by_id.name), 200
-        else:
-            return make_json_reply('Cannot update business'), 400
-    else:
+    if not check_business_by_id:
         return make_json_reply('Business id does not exist'), 404
+    data = request.get_json(force=True)
+    name, location, category, description = None
+    if 'name' in data.keys():
+        name = data['name']
+    if 'location' in data.keys():
+        location = data['location']
+    if 'category' in data.keys():
+        category = data['category']
+    if 'description' in data.keys():
+        description = data['description']
+    if check_business_by_id.user_id != current_user.id:
+        return make_json_reply('Cannot update business'), 400
+    if name != '' and name != check_business_by_id.name and name is not None:
+        check_business_by_id.name = name
+    if location != '' and location != check_business_by_id.location and location is not None:
+        check_business_by_id.location = location
+    if category != '' and category != check_business_by_id.category and category is not None:
+        check_business_by_id.category = category
+    if description != '' and description != check_business_by_id.description and description is not None:
+        check_business_by_id.description = description
+    db.session.add(check_business_by_id)
+    return make_json_reply(
+        'Successfully updated business ' + check_business_by_id.name), 200
 
 
 @api.route('/api/v1/businesses/<int:businessId>', methods=['DELETE'])
@@ -163,7 +153,6 @@ def retrieve_a_business_by_name(current_user):
             results = Business.query.filter_by(
                 name=business_name, location=filter_value).filter(
                     Business.name.ilike('%' + business_name + '%'))
-
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', results.count(), type=int)
     pagination = results.paginate(page, per_page=limit, error_out=False)
@@ -176,18 +165,18 @@ def retrieve_a_business_by_name(current_user):
     if pagination.has_next:
         next = url_for(
             'api.retrieve_a_business_by_name', page=page + 1, _external=True)
-    if search_results:
-        return make_json_reply({
-            'Searched Business Results ':
-            [business.to_json() for business in search_results],
-            'prev':
-            prev,
-            'next':
-            next
-        }), 200
-    else:
+
+    if not search_results:
         return make_json_reply(
             'No businesses registered called ' + business_name), 404
+    return make_json_reply({
+        'Searched Business Results ':
+        [business.to_json() for business in search_results],
+        'prev':
+        prev,
+        'next':
+        next
+    }), 200
 
 
 @api.route('/api/v1/businesses/filter', methods=['GET'])
@@ -213,16 +202,15 @@ def filter_business(current_user):
     next = None
     if pagination.has_next:
         next = url_for('api.filter_business', page=page + 1, _external=True)
-    if filter_results:
-        return make_json_reply({
-            'Business Results ':
-            [business.to_json() for business in filter_results],
-            'prev':
-            prev,
-            'next':
-            next
-        }), 200
-    else:
+    if not filter_results:
         return make_json_reply(
             'No businesses registered with filter type ' + str(filter_type) +
             ' = ' + str(filter_value)), 404
+    return make_json_reply({
+        'Business Results ':
+        [business.to_json() for business in filter_results],
+        'prev':
+        prev,
+        'next':
+        next
+    }), 200
