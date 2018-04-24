@@ -2,6 +2,7 @@ import json
 from test_base import TestBase
 from flask import url_for, request
 
+
 class TestReviewRoutes(TestBase):
     """Tests all routes concerning reviews"""
 

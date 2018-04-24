@@ -68,8 +68,5 @@ def reset_password(current_user):
     user_data = User.query.get(current_user.id)
     user_data.password = password
     db.session.add(user_data)
-    if user_data.check_password(password) != True:
-        return make_json_reply(
-            'message', 'Failure resetting password, username invalid'), 400
     return make_json_reply('message',
                            'Password has been set to ' + str(password)), 200

@@ -2,6 +2,7 @@ import json
 from test_base import TestBase
 from flask import url_for, request
 
+
 class TestBusinessRoutes(TestBase):
     """Tests all routes concerning businesses """
 
