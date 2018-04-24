@@ -9,6 +9,12 @@ class TestUserRoutes(TestBase):
             data=json.dumps(self.create_new_user))
         self.assertTrue(response.status_code == 201)
 
+    def test_existant_email_at_register(self):
+        response = self.client.post(
+            url_for('api.register_new_user'),
+            data=json.dumps(self.create_demo_user))
+        self.assertTrue(response.status_code == 400)
+        
     def test_missing_values_register_user(self):
         response = self.client.post(
             url_for('api.register_new_user'),
@@ -83,6 +89,13 @@ class TestUserRoutes(TestBase):
     def test_no_data_at_reset_password(self):
         response = self.client.post(
             url_for('api.reset_password'),
+            headers={'x-access-token': self.token})
+        self.assertTrue(response.status_code == 400)
+
+    def test_same_password_at_reset_password(self):
+        response = self.client.post(
+            url_for('api.reset_password'),
+            data=json.dumps(self.set_same_password)),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 400)
 

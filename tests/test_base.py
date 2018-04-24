@@ -74,8 +74,8 @@ class TestBase(unittest.TestCase):
 
     wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
     wrong_email_at_format_at_login = {'password': 'pass', 'email': '.'}
-    set_new_password = {'new_password': 'newpass'}
-
+    set_new_password = {'new_password': 'newpass_2'}
+    set_same_password = {'new_password': 'password'}
     wrong_password_credentials = {
         'password': 'wrongpass',
         'email': 'johndoe@mail.com'

@@ -52,10 +52,6 @@ def logout_user(current_user):
     blacklist = BlackListedTokens(token=blacklist_token)
     db.session.add(blacklist)
     db.session.commit()
-    if request.authorization and not blacklist_token:
-        return make_json_reply(
-            'message', 'Something went wrong, please try again ' +
-            str(url_for('api.logout_user', _external=True))), 400
     return make_json_reply('message', 'You have been successfully logout'), 200
 
 
