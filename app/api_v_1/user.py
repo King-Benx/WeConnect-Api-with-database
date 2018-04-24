@@ -15,7 +15,6 @@ def register_new_user():
     if len(data.keys()) != 3:
         return make_json_reply(
             'Couldn\'t create user, some fields missing'), 400
-
     username = data['username']
     email = data['email']
     password = data['password']
@@ -49,13 +48,12 @@ def logout_user(current_user):
     blacklist = BlackListedTokens(token=blacklist_token)
     db.session.add(blacklist)
     db.session.commit()
-    if blacklist_token and not request.authorization:
-        return make_json_reply('You have been successfully logout'), 200
-    else:
+    if request.authorization and not blacklist_token:
         return make_json_reply('Something went wrong, please try again ' + str(
             url_for('api.logout_user', _external=True))), 400
+    return make_json_reply('You have been successfully logout'), 200
 
-
+        
 @api.route('/api/v1/auth/reset-password', methods=['POST'])
 @swag_from('swagger/users/reset_password.yml')
 @token_required
