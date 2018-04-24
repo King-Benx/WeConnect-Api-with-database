@@ -170,8 +170,8 @@ def retrieve_a_business_by_name(current_user):
             'api.retrieve_a_business_by_name', page=page + 1, _external=True)
 
     if not search_results:
-        return make_json_reply('message',
-            'No businesses registered called ' + business_name), 404
+        return make_json_reply(
+            'message', 'No businesses registered called ' + business_name), 404
     return make_json_reply(
         'results', {
             'Searched Business Results ':
