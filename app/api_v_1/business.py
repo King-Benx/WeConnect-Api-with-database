@@ -136,19 +136,12 @@ def retrieve_all_businesses(current_user):
 @token_required
 def retrieve_a_business(current_user, businessId):
     """retrieve an existant single business"""
-    if Business.query.get(int(businessId)):
-        specific_business = Business.query.get_or_404(int(businessId))
-        if specific_business:
-            return make_json_reply(specific_business.to_json()), 200
-        else:
-            return make_json_reply(
-                'No businesses registered with that id currently, view all businesses at '
-                + str(url_for('api.retrieve_all_businesses', _external=True))
-            ), 400
-    else:
-        return make_json_reply(
+    specific_business = Business.query.get(int(businessId))
+    if not specific_business:
+        make_json_reply(
             'No businesses registered with that id currently, view all businesses at '
             + str(url_for('api.retrieve_all_businesses', _external=True))), 404
+    return make_json_reply(specific_business.to_json()), 200
 
 
 @api.route('/api/v1/businesses/search', methods=['GET'])
