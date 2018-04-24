@@ -72,17 +72,17 @@ def logout_user(current_user):
 def reset_password(current_user):
     """Changes the password of a user to new_password in json set"""
     data = request.get_json(force=True)
-    if (len(data.keys()) == 1):
-        password = data['new_password']
-        user_data = User.query.get(current_user.id)
-        user_data.password = password
-        db.session.add(user_data)
-        if user_data.check_password(password):
-            return make_json_reply(
-                'Password has been set to ' + str(password)), 200
-        else:
-            return make_json_reply(
-                'Failure resetting password, username invalid'), 400
-    else:
+    if (len(data.keys()) != 1):
         return make_json_reply(
             'Couldn\'t set password due missing fields'), 400
+    password = data['new_password']
+    user_data = User.query.get(current_user.id)
+    user_data.password = password
+    db.session.add(user_data)
+    if  user_data.check_password(password) != True:
+        return make_json_reply(
+                'Failure resetting password, username invalid'), 400      
+    return make_json_reply(
+            'Password has been set to ' + str(password)), 200
+      
+       
