@@ -64,10 +64,14 @@ def login():
                         },
                         Config.SECRET_KEY)
                     return make_json_reply({
-                        'user_status':'Successfully Logged in',
-                        'username': user.username,
-                        'email': email,
-                        'token': token.decode('UTF-8')
+                        'user_status':
+                        'Successfully Logged in',
+                        'username':
+                        user.username,
+                        'email':
+                        email,
+                        'token':
+                        token.decode('UTF-8')
                     }), 200
         else:
             return make_json_reply('Invalid Email, Try again'), 400

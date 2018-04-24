@@ -18,7 +18,8 @@ def register_new_user():
     username = data['username']
     email = data['email']
     password = data['password']
-    if check_validity_of_input(username=username,email=email,password=password) != True:
+    if check_validity_of_input(
+            username=username, email=email, password=password) != True:
         return make_json_reply('Values cannot be empty or not set'), 400
     if User.query.filter_by(email=email).count() == 1:
         return make_json_reply('Email already exists, try again'), 400
@@ -26,17 +27,16 @@ def register_new_user():
         return make_json_reply('Invalid email'), 400
     if len(password) < 3:
         return make_json_reply('Password too short'), 400
-    if len(username) < 3 or check_validity_of_username(
-                    username) == None:
-            return make_json_reply(
-                    'Username either too short or cannot start with a . '), 400
+    if len(username) < 3 or check_validity_of_username(username) == None:
+        return make_json_reply(
+            'Username either too short or cannot start with a . '), 400
     user = User(username=username, email=email, password=password)
     db.session.add(user)
-    return make_json_reply('Successfully created user ' + str(
-                        username) + ' you can login using ' + str(
-                            url_for('api.login', _external=True))), 201
-                
-# More work to be done on signing out
+    return make_json_reply(
+        'Successfully created user ' + str(username) + ' you can login using '
+        + str(url_for('api.login', _external=True))), 201
+
+
 @api.route('/api/v1/auth/logout', methods=['POST'])
 @swag_from('swagger/users/logout_user.yml')
 @token_required
@@ -53,7 +53,7 @@ def logout_user(current_user):
             url_for('api.logout_user', _external=True))), 400
     return make_json_reply('You have been successfully logout'), 200
 
-        
+
 @api.route('/api/v1/auth/reset-password', methods=['POST'])
 @swag_from('swagger/users/reset_password.yml')
 @token_required
@@ -67,10 +67,7 @@ def reset_password(current_user):
     user_data = User.query.get(current_user.id)
     user_data.password = password
     db.session.add(user_data)
-    if  user_data.check_password(password) != True:
+    if user_data.check_password(password) != True:
         return make_json_reply(
-                'Failure resetting password, username invalid'), 400      
-    return make_json_reply(
-            'Password has been set to ' + str(password)), 200
-      
-       
+            'Failure resetting password, username invalid'), 400
+    return make_json_reply('Password has been set to ' + str(password)), 200
