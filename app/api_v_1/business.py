@@ -15,10 +15,10 @@ def register_business(current_user):
     data = request.get_json(force=True)
     if not data:
         return make_json_reply(
-            'Cannot create business due to missing fields'), 400
+            'message', 'Cannot create business due to missing fields'), 400
     if (len(data.keys()) != 4):
         return make_json_reply(
-            'Cannot create business due to missing fields'), 400
+            'message', 'Cannot create business due to missing fields'), 400
     user_id = current_user.id
     name = data['name']
     location = data['location']
@@ -29,7 +29,7 @@ def register_business(current_user):
             location=location,
             category=category,
             description=description) == False:
-        return make_json_reply('Fields cannot be empty'), 400
+        return make_json_reply('message', 'Fields cannot be empty'), 400
     business = Business(
         user_id=user_id,
         name=name,
@@ -38,6 +38,7 @@ def register_business(current_user):
         description=description)
     db.session.add(business)
     return make_json_reply(
+        'message',
         'Business ' + str(business.name) + ' successfully created'), 201
 
 
@@ -48,9 +49,9 @@ def update_business(current_user, businessId):
     """update an authenticated user's business"""
     check_business_by_id = Business.query.get(int(businessId))
     if not check_business_by_id:
-        return make_json_reply('Business id does not exist'), 404
+        return make_json_reply('message', 'Business id does not exist'), 404
     data = request.get_json(force=True)
-    name, location, category, description = None
+    name = location = category = description = None
     if 'name' in data.keys():
         name = data['name']
     if 'location' in data.keys():
@@ -60,17 +61,18 @@ def update_business(current_user, businessId):
     if 'description' in data.keys():
         description = data['description']
     if check_business_by_id.user_id != current_user.id:
-        return make_json_reply('Cannot update business'), 400
-    if name != '' and name != check_business_by_id.name and name is not None:
+        return make_json_reply('message', 'Cannot update business'), 400
+    if check_validity_of_input(name=name):
         check_business_by_id.name = name
-    if location != '' and location != check_business_by_id.location and location is not None:
+    if check_validity_of_input(location=location):
         check_business_by_id.location = location
-    if category != '' and category != check_business_by_id.category and category is not None:
+    if check_validity_of_input(category=category):
         check_business_by_id.category = category
-    if description != '' and description != check_business_by_id.description and description is not None:
+    if check_validity_of_input(description=description):
         check_business_by_id.description = description
     db.session.add(check_business_by_id)
     return make_json_reply(
+        'message',
         'Successfully updated business ' + check_business_by_id.name), 200
 
 
@@ -83,12 +85,13 @@ def delete_business(current_user, businessId):
     if not (get_business_by_id
             and get_business_by_id.user_id == current_user.id):
         return make_json_reply(
+            'message',
             'Business id might not exist or you have no right to delete business'
         ), 404
-    business_name = check_business_by_id.name
-    db.session.delete(check_business_by_id)
+    business_name = get_business_by_id.name
+    db.session.delete(get_business_by_id)
     return make_json_reply(
-        'Successfully deleted business ' + str(business_name)), 200
+        'message', 'Successfully deleted business ' + str(business_name)), 200
 
 
 @api.route('/api/v1/businesses', methods=['GET'])
@@ -98,7 +101,7 @@ def retrieve_all_businesses(current_user):
     """retrieve all businesses"""
     if Business.query.count() == 0:
         return make_json_reply(
-            'No businesses registered currently, register one at ' +
+            'message', 'No businesses registered currently, register one at ' +
             str(url_for('api.register_business', _external=True))), 404
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', Business.query.count(), type=int)
@@ -112,13 +115,12 @@ def retrieve_all_businesses(current_user):
     if pagination.has_next:
         next = url_for(
             'api.retrieve_all_businesses', page=page + 1, _external=True)
-    return make_json_reply({
-        'Businesses ': [business.to_json() for business in businesses],
-        'prev':
-        prev,
-        'next':
-        next
-    }), 200
+    return make_json_reply(
+        'businesses', {
+            'Businesses ': [business.to_json() for business in businesses],
+            'prev': prev,
+            'next': next
+        }), 200
 
 
 @api.route('/api/v1/businesses/<int:businessId>', methods=['GET'])
@@ -128,10 +130,11 @@ def retrieve_a_business(current_user, businessId):
     """retrieve an existant single business"""
     specific_business = Business.query.get(int(businessId))
     if not specific_business:
-        make_json_reply(
+        return make_json_reply(
+            'message',
             'No businesses registered with that id currently, view all businesses at '
             + str(url_for('api.retrieve_all_businesses', _external=True))), 404
-    return make_json_reply(specific_business.to_json()), 200
+    return make_json_reply('business_info', specific_business.to_json()), 200
 
 
 @api.route('/api/v1/businesses/search', methods=['GET'])
@@ -167,16 +170,17 @@ def retrieve_a_business_by_name(current_user):
             'api.retrieve_a_business_by_name', page=page + 1, _external=True)
 
     if not search_results:
-        return make_json_reply(
+        return make_json_reply('message',
             'No businesses registered called ' + business_name), 404
-    return make_json_reply({
-        'Searched Business Results ':
-        [business.to_json() for business in search_results],
-        'prev':
-        prev,
-        'next':
-        next
-    }), 200
+    return make_json_reply(
+        'results', {
+            'Searched Business Results ':
+            [business.to_json() for business in search_results],
+            'prev':
+            prev,
+            'next':
+            next
+        }), 200
 
 
 @api.route('/api/v1/businesses/filter', methods=['GET'])
@@ -191,7 +195,7 @@ def filter_business(current_user):
     elif filter_type == 'location':
         results = Business.query.filter_by(location=filter_value)
     else:
-        return make_json_reply('Invalid filter type'), 400
+        return make_json_reply('message', 'Invalid filter type'), 400
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', results.count(), type=int)
     pagination = results.paginate(page, per_page=limit, error_out=False)
@@ -204,13 +208,14 @@ def filter_business(current_user):
         next = url_for('api.filter_business', page=page + 1, _external=True)
     if not filter_results:
         return make_json_reply(
-            'No businesses registered with filter type ' + str(filter_type) +
-            ' = ' + str(filter_value)), 404
-    return make_json_reply({
-        'Business Results ':
-        [business.to_json() for business in filter_results],
-        'prev':
-        prev,
-        'next':
-        next
-    }), 200
+            'message', 'No businesses registered with filter type ' +
+            str(filter_type) + ' = ' + str(filter_value)), 404
+    return make_json_reply(
+        'results', {
+            'Business Results ':
+            [business.to_json() for business in filter_results],
+            'prev':
+            prev,
+            'next':
+            next
+        }), 200

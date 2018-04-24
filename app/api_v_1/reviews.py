@@ -15,17 +15,17 @@ def post_review(current_user, businessId):
     data = request.get_json(force=True)
     if len(data.keys()) != 1:
         return make_json_reply(
-            'Cannot create review due to missing fields'), 400
+            'message', 'Cannot create review due to missing fields'), 400
     user_id = current_user.id
     business_id = int(businessId)
     if not Business.query.get(business_id):
         return make_json_reply(
-            'Cannot create review for none existant business'), 404
+            'message', 'Cannot create review for none existant business'), 404
     user_review = data['review']
     review = Review(
         user_id=user_id, business_id=business_id, review=user_review)
     db.session.add(review)
-    return make_json_reply('Review successfully created'), 201
+    return make_json_reply('message', 'Review successfully created'), 201
 
 
 @api.route('/api/v1/businesses/<int:businessId>/reviews', methods=['GET'])
@@ -34,7 +34,7 @@ def post_review(current_user, businessId):
 def get_reviews(current_user, businessId):
     """get reviews for business"""
     if not Business.query.get(int(businessId)):
-        return make_json_reply('None existant business id'), 404
+        return make_json_reply('message', 'None existant business id'), 404
     reviews = Review.query.filter_by(business_id=int(businessId))
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', reviews.count(), type=int)
@@ -55,11 +55,10 @@ def get_reviews(current_user, businessId):
             page=page + 1,
             _external=True)
     if not business_reviews:
-        return make_json_reply('No reviews for business'), 404
-    return make_json_reply({
-        'Reviews': [review.to_json() for review in business_reviews],
-        'prev':
-        prev,
-        'next':
-        next
-    }), 200
+        return make_json_reply('message', 'No reviews for business'), 404
+    return make_json_reply(
+        'reviews', {
+            'Reviews': [review.to_json() for review in business_reviews],
+            'prev': prev,
+            'next': next
+        }), 200

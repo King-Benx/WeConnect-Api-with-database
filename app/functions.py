@@ -3,8 +3,8 @@ from flask import jsonify
 """These are custom messages for handling json replies """
 
 
-def make_json_reply(message):
-    json_message = {'message': message}
+def make_json_reply(title, result):
+    json_message = {title: result}
     return jsonify(json_message)
 
 
@@ -20,7 +20,7 @@ def check_validity_of_username(username):
 
 def check_validity_of_input(**kwargs):
     for key, value in kwargs.items():
-        if value is not None and value != '' and len(value) != 0 and key is set:
+        if value is not None and value != '' and len(value) != 0:
             return True
         else:
             return False
