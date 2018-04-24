@@ -16,3 +16,10 @@ def check_validity_of_mail(email):
 
 def check_validity_of_username(username):
     return re.match('^[^.]*[a-zA-Z]$', username)
+
+def check_validity_of_input(**kwargs):
+    for key, value in kwargs.items():
+        if value is not None and value != '' and len(value) != 0 and key is set:
+            return True
+        else:
+            return False
