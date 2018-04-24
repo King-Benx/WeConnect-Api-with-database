@@ -9,7 +9,7 @@ install:
 script: 
   - python manage.py run_test
   - coverage run --source='.'  manage.py run_test
-  - coverage report
+  - coverage report --omit='app/main/'
 
 # push report to coveralls.io
 after_success:
