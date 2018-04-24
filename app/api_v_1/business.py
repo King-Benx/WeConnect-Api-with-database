@@ -106,31 +106,29 @@ def delete_business(current_user, businessId):
 @token_required
 def retrieve_all_businesses(current_user):
     """retrieve all businesses"""
-    if Business.query.count() > 0:
-        page = request.args.get('page', 1, type=int)
-        limit = request.args.get('limit', Business.query.count(), type=int)
-        pagination = Business.query.paginate(
-            page, per_page=limit, error_out=False)
-        businesses = pagination.items
-        prev = None
-        if pagination.has_prev:
-            prev = url_for(
-                'api.retrieve_all_businesses', page=page - 1, _external=True)
-        next = None
-        if pagination.has_next:
-            next = url_for(
-                'api.retrieve_all_businesses', page=page + 1, _external=True)
-        return make_json_reply({
-            'Businesses ': [business.to_json() for business in businesses],
-            'prev':
-            prev,
-            'next':
-            next
-        }), 200
-    else:
+    if Business.query.count() == 0:
         return make_json_reply(
             'No businesses registered currently, register one at ' +
             str(url_for('api.register_business', _external=True))), 404
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', Business.query.count(), type=int)
+    pagination = Business.query.paginate(page, per_page=limit, error_out=False)
+    businesses = pagination.items
+    prev = None
+    if pagination.has_prev:
+        prev = url_for(
+            'api.retrieve_all_businesses', page=page - 1, _external=True)
+    next = None
+    if pagination.has_next:
+        next = url_for(
+            'api.retrieve_all_businesses', page=page + 1, _external=True)
+    return make_json_reply({
+        'Businesses ': [business.to_json() for business in businesses],
+        'prev':
+        prev,
+        'next':
+        next
+    }), 200
 
 
 @api.route('/api/v1/businesses/<int:businessId>', methods=['GET'])
