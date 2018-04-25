@@ -8,7 +8,7 @@ install:
 # command to run tests
 script: 
   - python manage.py run_test
-  - coverage run --source='.'  manage.py run_test
+  - coverage run --source='.' --omit='app/main/*'  manage.py run_test
   - coverage report --omit='app/main/*'
 
 # push report to coveralls.io
