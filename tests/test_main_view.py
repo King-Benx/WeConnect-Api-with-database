@@ -9,4 +9,5 @@ class TestMain(unittest.TestCase):
         self.assertTrue(url_for('main.index', _external=True), 200)
 
     def test_api_docs(self):
-        self.assertTrue(str(url_for('main.index', _external=True)) + 'apidocs', 200)
+        self.assertTrue(
+            str(url_for('main.index', _external=True)) + 'apidocs', 200)
