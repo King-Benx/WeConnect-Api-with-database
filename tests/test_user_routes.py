@@ -93,6 +93,13 @@ class TestUserRoutes(TestBase):
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 400)
 
+    def test_more_fields_at_reset_password(self):
+        response = self.client.post(
+            url_for('api.reset_password'),
+            data=json.dumps(self.create_more_data_at_reset),
+            headers={'x-access-token': self.token})
+        self.assertTrue(response.status_code == 400)
+
     def test_logout_user(self):
         response = self.client.post(
             url_for('api.logout_user'), headers={'x-access-token': self.token})

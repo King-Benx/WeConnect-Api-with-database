@@ -55,7 +55,7 @@ def get_reviews(current_user, businessId):
             page=page + 1,
             _external=True)
     if not business_reviews:
-        return make_json_reply('message', 'No reviews for business'), 404
+        return make_json_reply('message', 'No reviews for business'), 200
     return make_json_reply(
         'reviews', {
             'Reviews': [review.to_json() for review in business_reviews],

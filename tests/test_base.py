@@ -28,6 +28,12 @@ class TestBase(unittest.TestCase):
             url_for('api.register_business'),
             data=json.dumps(self.create_new_business),
             headers={'x-access-token': self.token})
+
+        self.client.post(
+            url_for('api.register_business'),
+            data=json.dumps(self.create_new_business),
+            headers={'x-access-token': self.token})
+
         self.client.post(
             url_for('api.post_review', businessId=1),
             data=json.dumps(self.create_review),
@@ -95,3 +101,9 @@ class TestBase(unittest.TestCase):
     }
 
     create_review = {'review': 'review 1'}
+
+    create_more_data_at_reset = {
+        'extra_field': 'blah',
+        'password': 'password',
+        'new_password': 'password_2'
+    }

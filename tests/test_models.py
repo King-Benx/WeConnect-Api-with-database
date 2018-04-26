@@ -9,8 +9,8 @@ class TestModels(unittest.TestCase):
         user = User(
             username='janedoe', password='pass', email='janedoe@mail.com')
         self.assertTrue(user.__repr__() == "User 'janedoe'")
-        with self.assertRaises(AttributeError): user.password
-
+        with self.assertRaises(AttributeError):
+            user.password
 
     def test_business_repr(self):
         business = Business(
