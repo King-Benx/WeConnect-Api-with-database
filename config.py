@@ -25,7 +25,7 @@ class ProductionConfig(Config):
     """Production configurations"""
     USER = os.environ.get('USER')
     PASSWORD = os.environ.get('PASSWORD')
-    DB = os.environ.get('HEROKU-DB')
+    DB = os.environ.get('HEROKU_DB')
     HOST = os.environ.get('HOST')
     PORT = os.environ.get('PORT')
     POSTGRES = {
