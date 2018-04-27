@@ -23,13 +23,17 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     """Production configurations"""
+    USER = os.environ.get('USER')
+    PASSWORD = os.environ.get('PASSWORD')
+    DB = os.environ.get('HEROKU-DB')
+    HOST = os.environ.get('HOST')
+    PORT = os.environ.get('PORT')
     POSTGRES = {
-        'user': 'yugdidzdtdvtbs',
-        'pw':
-        '382f60e76260d3ead5021451626b644aaa35753b49e5b0274085cd1f5bf71555',
-        'db': 'd763a6843un291',
-        'host': 'ec2-54-225-96-191.compute-1.amazonaws.com',
-        'port': '5432',
+        'user': USER,
+        'pw':PASSWORD,
+        'db': DB,
+        'host': HOST,
+        'port': PORT,
     }
     DEVELOPMENT = True
     DEBUG = True
@@ -67,7 +71,5 @@ config = {
     'testing': TestingConfig,
     'production': ProductionConfig,
     'staging': StagingConfig,
-    # 'default': ProductionConfig
     'default': DevelopmentConfig
-    # 'default': StagingConfig
 }
