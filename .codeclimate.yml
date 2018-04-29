@@ -2,10 +2,10 @@ version: 1
 checks:
   argument-count:
     config:
-      threshold: 10
+      threshold: 20
   complex-logic:
     config:
-      threshold: 10
+      threshold: 20
   file-lines:
     config:
       threshold: 260
@@ -23,10 +23,10 @@ checks:
       threshold: 20
   return-statements:
     config:
-      threshold: 10
+      threshold: 20
   similar-code:
     config:
-      threshold: 10
+      threshold: 200
   identical-code:
     config:
-      threshold: 10
+      threshold: 100
