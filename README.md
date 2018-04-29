@@ -1,4 +1,4 @@
-# WeConnect-Api-with-database
+# WeConnect-Api
 [![Build Status](https://travis-ci.org/King-Benx/WeConnect-Api-with-database.svg?branch=master)](https://travis-ci.org/King-Benx/WeConnect-Api-with-database)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e8559133a6c764fb9fdf/maintainability)](https://codeclimate.com/github/King-Benx/WeConnect-Api-with-database/maintainability) [![Coverage Status](https://coveralls.io/repos/github/King-Benx/WeConnect-Api-with-database/badge.svg)](https://coveralls.io/github/King-Benx/WeConnect-Api-with-database)
 ## DESCRIPTION
@@ -8,7 +8,7 @@ creates awareness for businesses and gives the users the ability to write review
 businesses they have interacted with.
 
 ## LINK TO API
-### [WeConnect-API-with-postgres](https://weconnect-api-database.herokuapp.com)
+### [WeConnect-API](https://weconnect-api-database.herokuapp.com)
 
 ## __Project captures the following routes__
 
@@ -32,7 +32,7 @@ businesses they have interacted with.
 
 * Flask - Python Framework used
 
-## RUNNING THE APPLICATION
+## SETTING UP APPLICATION
 
 1. Create a folder weconnect-api-with-database
 
@@ -46,38 +46,47 @@ businesses they have interacted with.
 
     **```$ source weconnect-env/bin/activate```**
 
-### MORE INFORMATION ON VIRTUAL ENVIRONMENTS
+**NB: [More Information on setting up Virtual environments here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)**
 
-### [Setting up Virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
-
-3. A file that contains all necessary extensions exists within the app, to get all dependencies run the following command
+3. Install all project dependencies using
 
     **```pip3 install -r requirements.txt```**
 
-4. Configurations are handled by the **config.py** file and any environmental variables should occur in this file.
-5. Set up postgresql database and copy connection string in format.
+4. Set up a secret key for security purposes of your application
+    **```SECRET_KEY = 'veryhardkey'```**
 
-    **```DATABASE_URI='postgres://<db_user_name>:<password>@localhost/<database_name>'```**
+5. For testing purposes create a postgresql database and set an environment variable TEST-DATABASE to set your DATABASE URI
 
-6. To start the Api, you set up the following environment varriables
+    **```TEST_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-    Set up the environment to use, the default is set to Development Configurations, to change set the environment variable
+6. For development purposes create a postgresql database and set an environment variable DEV-DATABASE to set your DATABASE URI
+
+    **```DEV_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
+
+7. For staging purposes (stage before production ready) create a postgresql database and set an environment variable STAGING-DATABASE to set your DATABASE URI
+
+    **```STAGING_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
+
+8. For production purposes create a postgresql database and set an environment variable WECONNECT-DATABASE to set your DATABASE URI
+
+    **```WECONNECT_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
+
+**NB: [More Information on setting up postgresql here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)**
+## RUNNING APPLICATION
+
+1. Set the APPLICATION_CONFIG to define your settings. Select from (testing,development,staging,production)
 
     **```APPLICATION_CONFIG = <new_config>```**
 
-    Set path to the database
-
-    **```WECONNECT-DATABASE = <'postgres://<db_user_name>:<password>@localhost/<database_name>'>```**
-
-7.  To launch the application run the following command in your terminal
+2.  To launch the application, run the following command in your terminal
 
     **```python manage.py runserver```**
 
-8. To launch the shell run the following command in your terminal
+3. To launch the shell, run the following command in your terminal
 
     **```python manage.py shell```**
 
-9. To run tests on the application, run the following command in your terminal
+4. To run tests on the application, run the following command in your terminal
 
     **```python manage.py run_test```**
 
