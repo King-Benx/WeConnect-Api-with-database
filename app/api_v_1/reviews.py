@@ -22,6 +22,9 @@ def post_review(current_user, businessId):
         return make_json_reply(
             'message', 'Cannot create review for none existant business'), 404
     user_review = data['review']
+    if len(user_review) < 4:
+        return make_json_reply(
+            'message', 'Cannot create review due to very short review'), 400
     review = Review(
         user_id=user_id, business_id=business_id, review=user_review)
     db.session.add(review)

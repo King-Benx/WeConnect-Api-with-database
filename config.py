@@ -23,17 +23,15 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     """Production configurations"""
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'WECONNECT_DATABASE'
-    )
+    SQLALCHEMY_DATABASE_URI = os.environ.get('WECONNECT_DATABASE')
+
 
 class StagingConfig(Config):
     """Staging configurations"""
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'STAGING_DATABASE'
-    )
+    SQLALCHEMY_DATABASE_URI = os.environ.get('STAGING_DATABASE')
+
 
 class TestingConfig(Config):
     """Testing Configurations"""

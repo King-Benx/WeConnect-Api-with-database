@@ -53,6 +53,7 @@ businesses they have interacted with.
     **```pip3 install -r requirements.txt```**
 
 4. Set up a secret key for security purposes of your application
+
     **```SECRET_KEY = 'veryhardkey'```**
 
 5. For testing purposes create a postgresql database and set an environment variable TEST-DATABASE to set your DATABASE URI
@@ -71,7 +72,7 @@ businesses they have interacted with.
 
     **```WECONNECT_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-**NB: [More Information on setting up postgresql here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)**
+**NB: [More Information on setting up postgresql here](https://wixelhq.com/blog/how-to-install-postgresql-on-ubuntu-remote-access)**
 ## RUNNING APPLICATION
 
 1. Set the APPLICATION_CONFIG to define your settings. Select from (testing,development,staging,production)
