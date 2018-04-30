@@ -59,19 +59,19 @@ businesses they have interacted with.
 
     **```SECRET_KEY = 'veryhardkey'```**
 
-5. For testing purposes create a postgresql database and set an environment variable TEST-DATABASE to set your DATABASE URI
+5. For testing purposes create a postgresql database and set an environment variable TEST_DATABASE to set your DATABASE URI
 
     **```TEST_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-6. For development purposes create a postgresql database and set an environment variable DEV-DATABASE to set your DATABASE URI
+6. For development purposes create a postgresql database and set an environment variable DEV_DATABASE to set your DATABASE URI
 
     **```DEV_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-7. For staging purposes (stage before production ready) create a postgresql database and set an environment variable STAGING-DATABASE to set your DATABASE URI
+7. For staging purposes (stage before production ready) create a postgresql database and set an environment variable STAGING_DATABASE to set your DATABASE URI
 
     **```STAGING_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-8. For production purposes create a postgresql database and set an environment variable WECONNECT-DATABASE to set your DATABASE URI
+8. For production purposes create a postgresql database and set an environment variable WECONNECT_DATABASE to set your DATABASE URI
 
     **```WECONNECT_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
