@@ -57,7 +57,7 @@ businesses they have interacted with.
 
 4. Set up a secret key for security purposes of your application
 
-    **```SECRET_KEY = 'veryhardkey'```**
+    **```SECRET_KEY = '<your_secret_key>'```**
 
 5. For testing purposes create a postgresql database and set an environment variable TEST_DATABASE to set your DATABASE URI
 
