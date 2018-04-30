@@ -1,11 +1,14 @@
 # WeConnect-Api
 [![Build Status](https://travis-ci.org/King-Benx/WeConnect-Api-with-database.svg?branch=master)](https://travis-ci.org/King-Benx/WeConnect-Api-with-database)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e8559133a6c764fb9fdf/maintainability)](https://codeclimate.com/github/King-Benx/WeConnect-Api-with-database/maintainability) [![Coverage Status](https://coveralls.io/repos/github/King-Benx/WeConnect-Api-with-database/badge.svg)](https://coveralls.io/github/King-Benx/WeConnect-Api-with-database)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e8559133a6c764fb9fdf/maintainability)](https://codeclimate.com/github/King-Benx/WeConnect-Api-with-database/maintainability) [![Coverage Status](https://coveralls.io/repos/github/King-Benx/WeConnect-Api-with-database/badge.svg?branch=master)](https://coveralls.io/github/King-Benx/WeConnect-Api-with-database?branch=master)
 ## DESCRIPTION
 
 WeConnect provides a platform that brings businesses and individuals together. This platform
 creates awareness for businesses and gives the users the ability to write reviews about the
 businesses they have interacted with.
+
+## WALK-THROUGH OF API
+### [![WeConnect Api Walk-through](https://www.dropbox.com/s/o7uhz7m6lflyzz7/api.png?dl=0)](https://youtu.be/52F-R9n-rsw)
 
 ## LINK TO API
 ### [WeConnect-API](https://weconnect-api-database.herokuapp.com)
@@ -54,21 +57,21 @@ businesses they have interacted with.
 
 4. Set up a secret key for security purposes of your application
 
-    **```SECRET_KEY = 'veryhardkey'```**
+    **```SECRET_KEY = '<your_secret_key>'```**
 
-5. For testing purposes create a postgresql database and set an environment variable TEST-DATABASE to set your DATABASE URI
+5. For testing purposes create a postgresql database and set an environment variable TEST_DATABASE to set your DATABASE URI
 
     **```TEST_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-6. For development purposes create a postgresql database and set an environment variable DEV-DATABASE to set your DATABASE URI
+6. For development purposes create a postgresql database and set an environment variable DEV_DATABASE to set your DATABASE URI
 
     **```DEV_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-7. For staging purposes (stage before production ready) create a postgresql database and set an environment variable STAGING-DATABASE to set your DATABASE URI
+7. For staging purposes (stage before production ready) create a postgresql database and set an environment variable STAGING_DATABASE to set your DATABASE URI
 
     **```STAGING_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
-8. For production purposes create a postgresql database and set an environment variable WECONNECT-DATABASE to set your DATABASE URI
+8. For production purposes create a postgresql database and set an environment variable WECONNECT_DATABASE to set your DATABASE URI
 
     **```WECONNECT_DATABASE = 'postgres://<db_user_name>:<password>@localhost/<database_name>'```**
 
