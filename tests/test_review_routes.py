@@ -10,21 +10,21 @@ class TestReviewRoutes(TestBase):
     def test_post_review(self):
         response = self.client.post(
             url_for('api.post_review', businessId=1),
-            data=json.dumps(self.review_info),
+            data=json.dumps(self.review),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 201)
 
     def test_unknown_business_id_at_post_review(self):
         response = self.client.post(
             url_for('api.post_review', businessId=3),
-            data=json.dumps(self.review_info),
+            data=json.dumps(self.review),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 404)
 
     def test_unauthorized_user_at_post_review(self):
         response = self.client.post(
             url_for('api.post_review', businessId=1),
-            data=json.dumps(self.review_info))
+            data=json.dumps(self.review))
         self.assertTrue(response.status_code == 401)
 
     def test_empty_review_at_post_review(self):

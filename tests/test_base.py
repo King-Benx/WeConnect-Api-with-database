@@ -17,26 +17,25 @@ class TestBase(unittest.TestCase):
         db.create_all()
         self.client = self.app.test_client()
         self.client.post(
-            url_for('api.register_new_user'),
-            data=json.dumps(self.demo_user_info))
+            url_for('api.register_new_user'), data=json.dumps(self.demo_user))
         login_test_user = self.client.post(
-            url_for('api.login'), data=json.dumps(self.login_user_info))
+            url_for('api.login'), data=json.dumps(self.login_user))
         user_logged_in_data = json.loads(login_test_user.data.decode())
         self.token = user_logged_in_data['message']['token']
 
         self.client.post(
             url_for('api.register_business'),
-            data=json.dumps(self.new_business_info),
+            data=json.dumps(self.new_business),
             headers={'x-access-token': self.token})
 
         self.client.post(
             url_for('api.register_business'),
-            data=json.dumps(self.new_business_info),
+            data=json.dumps(self.new_business),
             headers={'x-access-token': self.token})
 
         self.client.post(
             url_for('api.post_review', businessId=1),
-            data=json.dumps(self.review_info),
+            data=json.dumps(self.review),
             headers={'x-access-token': self.token})
 
     def tearDown(self):
@@ -45,33 +44,36 @@ class TestBase(unittest.TestCase):
         self.app_context.pop()
 
     # variables used at creation of user
-    demo_user_info = {
+    demo_user = {
         'username': 'johndoe',
         'password': 'password',
         'email': 'johndoe@mail.com'
     }
 
-    new_user_info = {
+    new_user = {
         'username': 'janedoe',
         'password': 'password2',
         'email': 'janedoe@mail.com'
     }
 
-    wrong_new_user_info = {'username': 'wrong user', 'password': 'wrong pass'}
+    missing_email_at_register = {
+        'username': 'wrong user',
+        'password': 'wrong pass'
+    }
 
-    short_password_in_new_user_info = {
+    short_password_in_new_user = {
         'username': 'janedoe',
         'password': 'pa',
         'email': 'janedoe@mail.com'
     }
 
-    wrong_username_in_new_user_info = {
+    wrong_username_in_new_user = {
         'username': '.john',
         'password': 'password',
         'email': 'janedoe@mail.com'
     }
 
-    wrong_email_in_new_user_info = {
+    wrong_email_in_new_user = {
         'username': 'johndoe',
         'password': 'password',
         'email': 'john.mail'
@@ -80,21 +82,24 @@ class TestBase(unittest.TestCase):
     empty_new_user_info = {'username': '', 'password': '', 'email': ''}
 
     # variables used at login
-    login_user_info = {'password': 'password', 'email': 'johndoe@mail.com'}
+    login_user = {'password': 'password', 'email': 'johndoe@mail.com'}
 
     empty_record = {}
 
-    wrong_email_credentials = {'password': 'pass', 'email': 'janedoe@mail.com'}
+    invalid_email_credentials = {
+        'password': 'pass',
+        'email': 'janedoe@mail.com'
+    }
 
-    wrong_email_format_at_login = {'password': 'pass', 'email': '.'}
+    invalid_email_format_at_login = {'password': 'pass', 'email': '.'}
 
-    wrong_password_credentials = {
+    invalid_password_credentials = {
         'password': 'wrongpass',
         'email': 'johndoe@mail.com'
     }
 
     # variables used at reseting password
-    new_password_info = {'new_password': 'newpass_2'}
+    new_password = {'new_password': 'newpass_2'}
 
     more_data_at_reset = {
         'extra_field': 'blah',
@@ -103,14 +108,14 @@ class TestBase(unittest.TestCase):
     }
 
     # variables used in businesses
-    new_business_info = {
+    new_business = {
         'name': 'business 1',
         'location': 'location 1',
         'category': 'category 1',
         'description': 'business description 1'
     }
 
-    business_update_info = {
+    business_update = {
         'name': ' new business 1',
         'location': 'new location 1',
         'category': 'new category 1',
@@ -118,6 +123,6 @@ class TestBase(unittest.TestCase):
     }
 
     # variables used in reviews
-    review_info = {'review': 'review 1'}
+    review = {'review': 'review 1'}
 
     short_review = {'review': 'rev'}
