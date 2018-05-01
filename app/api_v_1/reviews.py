@@ -78,7 +78,8 @@ def get_reviews(current_user, businessId):
 
     return make_json_reply(
         'reviews', {
-            'Reviews': [review.to_json() for review in business_reviews],
+            'business_reviews':
+            [review.to_json() for review in business_reviews],
             'prev': prev,
             'next': next
         }), 200

@@ -56,7 +56,7 @@ class TestBase(unittest.TestCase):
         'email': 'janedoe@mail.com'
     }
 
-    missing_email_at_register = {
+    missing_email_in_new_user = {
         'username': 'wrong user',
         'password': 'wrong pass'
     }
@@ -67,13 +67,13 @@ class TestBase(unittest.TestCase):
         'email': 'janedoe@mail.com'
     }
 
-    wrong_username_in_new_user = {
+    invalid_username_in_new_user = {
         'username': '.john',
         'password': 'password',
         'email': 'janedoe@mail.com'
     }
 
-    wrong_email_in_new_user = {
+    invalid_email_in_new_user = {
         'username': 'johndoe',
         'password': 'password',
         'email': 'john.mail'

@@ -17,7 +17,7 @@ class TestUserRoutes(TestBase):
     def test_missing_values_register_user(self):
         response = self.client.post(
             url_for('api.register_new_user'),
-            data=json.dumps(self.missing_email_at_register))
+            data=json.dumps(self.missing_email_in_new_user))
         self.assertTrue(response.status_code == 400)
 
     def test_empty_credentials_register_user(self):
@@ -29,13 +29,13 @@ class TestUserRoutes(TestBase):
     def test_wrong_email_at_register_user(self):
         response = self.client.post(
             url_for('api.register_new_user'),
-            data=json.dumps(self.wrong_email_in_new_user))
+            data=json.dumps(self.invalid_email_in_new_user))
         self.assertTrue(response.status_code == 400)
 
     def test_wrong_username_at_register_user(self):
         response = self.client.post(
             url_for('api.register_new_user'),
-            data=json.dumps(self.wrong_username_in_new_user))
+            data=json.dumps(self.invalid_username_in_new_user))
         self.assertTrue(response.status_code == 400)
 
     def test_short_password_at_register_user(self):

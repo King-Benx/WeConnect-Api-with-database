@@ -64,6 +64,9 @@ def update_business(current_user, businessId):
     if not business:
         return make_json_reply('message', 'Business id does not exist'), 404
 
+    if business.user_id != current_user.id:
+        return make_json_reply('message', 'Cannot update business'), 400
+
     data = request.get_json(force=True)
     name = location = category = description = None
 
@@ -78,9 +81,6 @@ def update_business(current_user, businessId):
 
     if 'description' in data.keys():
         description = data['description']
-
-    if business.user_id != current_user.id:
-        return make_json_reply('message', 'Cannot update business'), 400
 
     if check_validity_of_input(name=name):
         business.name = name
@@ -150,8 +150,8 @@ def get_all_businesses(current_user):
         next = url_for('api.get_all_businesses', page=page + 1, _external=True)
 
     return make_json_reply(
-        'businesses', {
-            'Businesses ': [business.to_json() for business in businesses],
+        'results', {
+            'businesses': [business.to_json() for business in businesses],
             'prev': prev,
             'next': next
         }), 200
@@ -220,7 +220,7 @@ def get_a_business_by_name(current_user):
 
     return make_json_reply(
         'results', {
-            'Searched Business Results ':
+            'searched_businesses':
             [business.to_json() for business in search_results],
             'prev':
             prev,
@@ -266,7 +266,7 @@ def filter_business(current_user):
 
     return make_json_reply(
         'results', {
-            'Business Results ':
+            'filtered_businesses':
             [business.to_json() for business in filter_results],
             'prev':
             prev,
