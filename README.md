@@ -26,7 +26,7 @@ businesses they have interacted with.
 | GET | api/v1/businesses/filter | Filter business by location/category |
 | GET | api/v1/businesses/search | Search for a business by name |
 | DELETE | api/v1/businesses/&lt;businessId&gt; | Delete a business |
-| GET | api/v1/businesses/&lt;businessId&gt; | Get a business by Id |
+| GET | api/v1/businesses/&lt;businessId&gt; | Get a business by id |
 | PUT | api/v1/businesses/&lt;businessId&gt; | Update a specific business  |
 | GET | api/v1/businesses/&lt;businessId&gt;/reviews | Get reviews of a business |
 | POST | ap1/v1/businesses/&lt;businessId&gt;/reviews | Post a review about a business|
