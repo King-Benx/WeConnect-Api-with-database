@@ -80,7 +80,8 @@ class TestBase(unittest.TestCase):
     }
 
     empty_user = {'username': '', 'password': '', 'email': ''}
-
+    
+    invalid_key = {'password':'wrongpass'}
     # variables used at login
     login_user = {'password': 'password', 'email': 'johndoe@mail.com'}
 

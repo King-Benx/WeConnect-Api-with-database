@@ -99,7 +99,7 @@ class TestUserRoutes(TestBase):
 
     def test_invalid_key_at_reset_password(self):
         response = self.client.post(
-            url_for('api.reset_password'), data=json.dumps(self.empty_user),
+            url_for('api.reset_password'), data=json.dumps(self.invalid_key),
             headers={'x-access-token': self.token})
         self.assertTrue(response.status_code == 400)
 
