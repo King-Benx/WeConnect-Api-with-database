@@ -164,15 +164,15 @@ def get_a_business(current_user, businessId):
     """
     retrieve an existant single business
     """
-    specific_business = Business.query.get(int(businessId))
+    business = Business.query.get(int(businessId))
 
-    if not specific_business:
+    if not business:
         return make_json_reply(
             'message',
             'No businesses registered with that id currently, view all businesses at '
             + str(url_for('api.get_all_businesses', _external=True))), 404
 
-    return make_json_reply('business_info', specific_business.to_json()), 200
+    return make_json_reply('business_info', business.to_json()), 200
 
 
 @api.route('/api/v1/businesses/search', methods=['GET'])
@@ -185,9 +185,11 @@ def get_a_business_by_name(current_user):
     business_name = str(request.args.get('q'))
     filter_type = str(request.args.get('filter_type'))
     filter_value = str(request.args.get('filter_value'))
+
     results = Business.query.filter(
         Business.name.ilike('%' + business_name + '%'))
 
+    # filter by either category or location
     if filter_type and filter_value:
         if filter_type == 'category':
             results = Business.query.filter_by(
@@ -199,8 +201,10 @@ def get_a_business_by_name(current_user):
                 name=business_name, location=filter_value).filter(
                     Business.name.ilike('%' + business_name + '%'))
 
+    # paginate results
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', results.count(), type=int)
+
     pagination = results.paginate(page, per_page=limit, error_out=False)
     search_results = pagination.items
     prev = None
