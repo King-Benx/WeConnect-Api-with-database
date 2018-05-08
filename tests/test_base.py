@@ -79,7 +79,7 @@ class TestBase(unittest.TestCase):
         'email': 'john.mail'
     }
 
-    # empty_new_user = {'username': '', 'password': '', 'email': ''}
+    empty_user = {'username': '', 'password': '', 'email': ''}
 
     # variables used at login
     login_user = {'password': 'password', 'email': 'johndoe@mail.com'}
