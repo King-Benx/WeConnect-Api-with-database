@@ -62,10 +62,10 @@ def logout_user(current_user):
     """
     request.authorization = None
     current_user = None
-    blacklist_token = request.headers['x-access-token']
-    blacklist = BlackListedTokens(token=blacklist_token)
+    token = request.headers['x-access-token']
+    token_to_blacklist = BlackListedTokens(token=token)
 
-    db.session.add(blacklist)
+    db.session.add(token_to_blacklist)
     db.session.commit()
 
     return make_json_reply('message', 'You have been successfully logout'), 200
@@ -84,10 +84,14 @@ def reset_password(current_user):
         return make_json_reply(
             'message', 'Couldn\'t set password due missing fields'), 400
 
-    password = data['new_password']
-    user_data = User.query.get(current_user.id)
-    user_data.password = password
-    db.session.add(user_data)
+    if 'new_password' not in data.keys():
+        return make_json_reply('message',
+                               'Couldn\'t set password due invalid key'), 400
 
-    return make_json_reply('message',
-                           'Password has been set to ' + str(password)), 200
+    new_password = data['new_password']
+    user = User.query.get(current_user.id)
+    user.password = new_password
+    db.session.add(user)
+
+    return make_json_reply(
+        'message', 'Password has been set to ' + str(new_password)), 200

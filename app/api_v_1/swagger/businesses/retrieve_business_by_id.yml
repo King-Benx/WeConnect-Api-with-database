@@ -21,7 +21,7 @@ definitions:
       id:
         type: integer
         format: int64
-      user_id:
+      user_id: 
         type: integer
         format: int64
       name:

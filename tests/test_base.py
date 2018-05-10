@@ -79,8 +79,9 @@ class TestBase(unittest.TestCase):
         'email': 'john.mail'
     }
 
-    empty_new_user_info = {'username': '', 'password': '', 'email': ''}
-
+    empty_user = {'username': '', 'password': '', 'email': ''}
+    
+    invalid_key = {'password':'wrongpass'}
     # variables used at login
     login_user = {'password': 'password', 'email': 'johndoe@mail.com'}
 

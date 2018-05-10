@@ -21,9 +21,8 @@ def post_review(current_user, businessId):
             'message', 'Cannot create review due to missing fields'), 400
 
     user_id = current_user.id
-    business_id = int(businessId)
 
-    if not Business.query.get(business_id):
+    if not Business.query.get(int(businessId)):
         return make_json_reply(
             'message', 'Cannot create review for none existant business'), 404
 
@@ -34,7 +33,7 @@ def post_review(current_user, businessId):
             'message', 'Cannot create review due to very short review'), 400
 
     review = Review(
-        user_id=user_id, business_id=business_id, review=user_review)
+        user_id=user_id, business_id=int(businessId), review=user_review)
     db.session.add(review)
 
     return make_json_reply('message', 'Review successfully created'), 201

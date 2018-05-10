@@ -8,7 +8,7 @@ creates awareness for businesses and gives the users the ability to write review
 businesses they have interacted with.
 
 ## WALK-THROUGH OF API
-### [![WeConnect Api Walk-through](https://www.dropbox.com/s/o7uhz7m6lflyzz7/api.png?dl=0)](https://youtu.be/52F-R9n-rsw)
+### [WeConnect Api Walk-through](https://youtu.be/52F-R9n-rsw)
 
 ## LINK TO API
 ### [WeConnect-API](https://weconnect-api-database.herokuapp.com)
