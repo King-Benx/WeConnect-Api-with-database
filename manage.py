@@ -4,11 +4,12 @@ from app import create_app, db
 from app.models import User, Business, Review
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
+from flask_cors import CORS
 
 app = create_app(os.getenv('APPLICATION_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
-
+CORS(app)
 
 @manager.command
 def run_test():
