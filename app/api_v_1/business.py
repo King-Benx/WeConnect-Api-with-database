@@ -157,6 +157,39 @@ def get_all_businesses(current_user):
         }), 200
 
 
+@api.route('/api/v1/owned_businesses', methods=['GET'])
+@token_required
+def get_owned_businesses(current_user):
+    """
+    retrieve all businesses
+    """
+
+    if Business.query.filter_by(user_id=current_user.id).count() == 0:
+        return make_json_reply(
+            'message', 'No businesses registered currently, register one at ' +
+            str(url_for('api.register_business', _external=True))), 404
+
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', Business.query.filter_by(user_id=current_user.id).count(), type=int)
+    pagination = Business.query.filter_by(user_id=current_user.id).paginate(page, per_page=limit, error_out=False)
+    businesses = pagination.items
+    prev = None
+
+    if pagination.has_prev:
+        prev = url_for('api.get_owned_businesses', page=page - 1, _external=True)
+    next = None
+
+    if pagination.has_next:
+        next = url_for('api.get_owned_businesses', page=page + 1, _external=True)
+
+    return make_json_reply(
+        'results', {
+            'businesses': [business.to_json() for business in businesses],
+            'prev': prev,
+            'next': next
+        }), 200
+
+
 @api.route('/api/v1/businesses/<int:businessId>', methods=['GET'])
 @swag_from('swagger/businesses/retrieve_business_by_id.yml')
 @token_required
