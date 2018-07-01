@@ -1,4 +1,4 @@
-from flask import request, url_for, session
+from flask import request
 from flasgger import swag_from
 from . import api
 from ..models import User, BlackListedTokens
@@ -49,8 +49,7 @@ def register_new_user():
 
     return make_json_reply(
         'message',
-        'Successfully created user ' + str(username) + ' you can login using '
-        + str(url_for('api.login', _external=True))), 201
+        'Successfully created user ' + str(username) + ' you can login using'), 201
 
 
 @api.route('/api/v1/auth/logout', methods=['POST'])
