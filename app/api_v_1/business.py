@@ -2,7 +2,7 @@ from flask import request, url_for
 from flasgger import swag_from
 from . import api
 from .. import db
-from ..models import Business, User
+from ..models import Business
 from .authentication import token_required
 from ..functions import make_json_reply, check_validity_of_input
 
@@ -133,8 +133,7 @@ def get_all_businesses(current_user):
 
     if Business.query.count() == 0:
         return make_json_reply(
-            'message', 'No businesses registered currently, register one at ' +
-            str(url_for('api.register_business', _external=True))), 404
+            'message', 'No businesses registered currently'), 404
 
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', Business.query.count(), type=int)
@@ -166,8 +165,7 @@ def get_owned_businesses(current_user):
 
     if Business.query.filter_by(user_id=current_user.id).count() == 0:
         return make_json_reply(
-            'message', 'No businesses registered currently, register one at ' +
-            str(url_for('api.register_business', _external=True))), 404
+            'message', 'No businesses registered currently'), 404
 
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', Business.query.filter_by(user_id=current_user.id).count(), type=int)
@@ -202,8 +200,7 @@ def get_a_business(current_user, businessId):
     if not business:
         return make_json_reply(
             'message',
-            'No businesses registered with that id currently, view all businesses at '
-            + str(url_for('api.get_all_businesses', _external=True))), 404
+            'No businesses registered with that id currently'), 404
 
     return make_json_reply('business_info', business.to_json()), 200
 

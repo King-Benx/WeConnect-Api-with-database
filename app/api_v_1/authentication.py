@@ -1,6 +1,6 @@
 import jwt
 import datetime
-from flask import request, url_for, make_response
+from flask import request
 from flasgger import swag_from
 from ..models import User, BlackListedTokens
 from config import Config
@@ -23,8 +23,7 @@ def token_required(f):
         else:
             return make_json_reply(
                 'message',
-                'Token no longer valid, user signed out! Login again ' + str(
-                    url_for('api.login', _external=True))), 401
+                'Token no longer valid, user signed out! Login again '), 401
 
         if not token:
             return make_json_reply('message',
@@ -51,8 +50,7 @@ def login():
 
     if len(data.keys()) != 2:
         return make_json_reply(
-            'message', "Unknown user, register now or try to Login again" +
-            str(url_for('api.login', _external=True))), 404
+            'message', "Unknown user, register now or try to Login again"), 404
 
     email = data['email']
     password = data['password']
@@ -62,16 +60,14 @@ def login():
 
     if User.query.filter_by(email=email).count() == 0:
         return make_json_reply('message',
-                               "Could not verify! wrong email, Try again " +
-                               str(url_for('api.login', _external=True))), 401
+                               "Could not verify! wrong email, Try again "), 401
 
     user = User.query.filter_by(email=email).first()
     password_validity = user.check_password(password)
 
     if not password_validity:
         return make_json_reply(
-            'message', "Could not verify! password incorrect, Try again " +
-            str(url_for('api.login', _external=True))), 401
+            'message', "Could not verify! password incorrect, Try again "), 401
 
     token = jwt.encode(
         {
