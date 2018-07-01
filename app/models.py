@@ -1,4 +1,3 @@
-from flask import url_for
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -91,7 +90,7 @@ class Review(db.Model):
     def to_json(self):
         json_review = {
             'author': User.query.get(self.user_id).username,
-            'review: ': self.review,
+            'review': self.review,
             'date_created': self.date_created,
             'last_modified': self.date_modified,
             'created_by': User.query.get(self.user_id).username
