@@ -62,4 +62,4 @@ class TestReviewRoutes(TestBase):
         response = self.client.get(
             url_for('api.get_reviews', businessId=2),
             headers={'x-access-token': self.token})
-        self.assertTrue(response.status_code == 200)
+        self.assertTrue(response.status_code == 404)
