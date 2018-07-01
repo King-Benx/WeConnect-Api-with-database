@@ -73,7 +73,7 @@ def get_reviews(current_user, businessId):
             _external=True)
 
     if not business_reviews:
-        return make_json_reply('message', 'No reviews for business'), 200
+        return make_json_reply('message', 'No reviews for business'), 404
 
     return make_json_reply(
         'reviews', {
