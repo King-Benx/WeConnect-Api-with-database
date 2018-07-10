@@ -49,7 +49,7 @@ def register_new_user():
 
     return make_json_reply(
         'message',
-        'Successfully created user ' + str(username) + ' you can login using'), 201
+        'Successfully created user ' + str(username) + ' you can login'), 201
 
 
 @api.route('/api/v1/auth/logout', methods=['POST'])
