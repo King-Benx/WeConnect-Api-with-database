@@ -132,8 +132,8 @@ def get_all_businesses(current_user):
     """
 
     if Business.query.count() == 0:
-        return make_json_reply(
-            'message', 'No businesses registered currently'), 404
+        return make_json_reply('message',
+                               'No businesses registered currently'), 404
 
     page = request.args.get('page', 1, type=int)
     limit = request.args.get('limit', Business.query.count(), type=int)
@@ -164,21 +164,27 @@ def get_owned_businesses(current_user):
     """
 
     if Business.query.filter_by(user_id=current_user.id).count() == 0:
-        return make_json_reply(
-            'message', 'No businesses registered currently'), 404
+        return make_json_reply('message',
+                               'No businesses registered currently'), 404
 
     page = request.args.get('page', 1, type=int)
-    limit = request.args.get('limit', Business.query.filter_by(user_id=current_user.id).count(), type=int)
-    pagination = Business.query.filter_by(user_id=current_user.id).paginate(page, per_page=limit, error_out=False)
+    limit = request.args.get(
+        'limit',
+        Business.query.filter_by(user_id=current_user.id).count(),
+        type=int)
+    pagination = Business.query.filter_by(user_id=current_user.id).paginate(
+        page, per_page=limit, error_out=False)
     businesses = pagination.items
     prev = None
 
     if pagination.has_prev:
-        prev = url_for('api.get_owned_businesses', page=page - 1, _external=True)
+        prev = url_for(
+            'api.get_owned_businesses', page=page - 1, _external=True)
     next = None
 
     if pagination.has_next:
-        next = url_for('api.get_owned_businesses', page=page + 1, _external=True)
+        next = url_for(
+            'api.get_owned_businesses', page=page + 1, _external=True)
 
     return make_json_reply(
         'results', {
@@ -199,8 +205,7 @@ def get_a_business(current_user, businessId):
 
     if not business:
         return make_json_reply(
-            'message',
-            'No businesses registered with that id currently'), 404
+            'message', 'No businesses registered with that id currently'), 404
 
     return make_json_reply('business_info', business.to_json()), 200
 
@@ -222,14 +227,14 @@ def get_a_business_by_name(current_user):
     # filter by either category or location
     if filter_type and filter_value:
         if filter_type == 'category':
-            results = Business.query.filter_by(
-                name=business_name, category=filter_value).filter(
+            results = Business.query.filter(
+                Business.category.ilike('%'+filter_value+'%')).filter(
                     Business.name.ilike('%' + business_name + '%'))
 
         if filter_type == 'location':
-            results = Business.query.filter_by(
-                name=business_name, location=filter_value).filter(
-                    Business.name.ilike('%' + business_name + '%'))
+            results = Business.query.filter(
+                Business.location.ilike('%' + filter_value + '%')).filter(
+                Business.name.ilike('%' + business_name + '%'))
 
     # paginate results
     page = request.args.get('page', 1, type=int)
