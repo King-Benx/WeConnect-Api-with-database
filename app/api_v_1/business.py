@@ -268,7 +268,8 @@ def get_a_business_by_name(current_user):
             'prev':
             prev,
             'next':
-            next
+            next,
+            'records': math.ceil(results.count() / 5)
         }), 200
 
 
