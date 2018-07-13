@@ -1,3 +1,4 @@
+import math
 from flask import request, url_for
 from flasgger import swag_from
 from . import api
@@ -152,7 +153,8 @@ def get_all_businesses(current_user):
         'results', {
             'businesses': [business.to_json() for business in businesses],
             'prev': prev,
-            'next': next
+            'next': next,
+            'records': math.ceil(Business.query.count() / 5)
         }), 200
 
 
@@ -190,7 +192,9 @@ def get_owned_businesses(current_user):
         'results', {
             'businesses': [business.to_json() for business in businesses],
             'prev': prev,
-            'next': next
+            'next': next,
+            'records': math.ceil(Business.query.filter_by(user_id=current_user.id).count() / 5)
+
         }), 200
 
 
